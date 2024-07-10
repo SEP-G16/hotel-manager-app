@@ -12,6 +12,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColourConstants.ivory,
       body: SafeArea(
         child: Container(
           alignment: Alignment.center,
@@ -60,12 +61,15 @@ class ProfileScreen extends StatelessWidget {
                     Positioned(
                       bottom: 0,
                       right: 10,
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: ColourConstants.mainBlue,
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
+                      child: GestureDetector(
+                        onTap: (){},
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: ColourConstants.mainBlue,
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -73,16 +77,17 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.0,),
                 NamedInputField(titleText: 'Name', onChanged: (value){}),
-                SizedBox(height: 20.0,),
+                // SizedBox(height: 20.0,),
                 NamedInputField(titleText: 'Position', onChanged: (value){}),
-                SizedBox(height: 20.0,),
+                // SizedBox(height: 20.0,),
                 NamedInputField(titleText: 'Email', onChanged: (value){}),
-                SizedBox(height: 20.0,),
+                // SizedBox(height: 20.0,),
                 NamedInputField(titleText: 'Phone No.', onChanged: (value){}),
                 SizedBox(height: 20.0,),
                 ActionButton(btnText: 'Change Password', onTap: (){}, width: 220,),
                 SizedBox(height: 20.0,),
                 ActionButton(btnText: 'Logout', onTap: (){}, width: 220,),
+                SizedBox(height: 20.0,),
               ],
             ),
           ),

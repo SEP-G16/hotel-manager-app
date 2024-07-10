@@ -12,6 +12,7 @@ class ReviewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColourConstants.ivory,
       body: SafeArea(
         child: Column(
           children: [

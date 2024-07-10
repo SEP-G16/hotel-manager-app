@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hotel_manager/components/action_button.dart';
 import 'package:hotel_manager/components/input_field.dart';
+import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/constants/svg_constants.dart';
 import 'package:hotel_manager/constants/text_constants.dart';
 
@@ -11,6 +12,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColourConstants.ivory,
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: SafeArea(
