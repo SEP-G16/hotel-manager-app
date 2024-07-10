@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_manager/views/loading_screen.dart';
 import 'package:hotel_manager/views/login_screen.dart';
 import 'package:hotel_manager/views/profile_screen.dart';
+import 'package:hotel_manager/views/reviews_screen.dart';
 
 void main() {
   runApp(const HotelManager());
@@ -19,7 +20,7 @@ class HotelManager extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: ProfileScreen(),
+      home: ReviewsScreen(),
     );
   }
 }
