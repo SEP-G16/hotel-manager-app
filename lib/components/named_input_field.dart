@@ -23,6 +23,7 @@ class NamedInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
