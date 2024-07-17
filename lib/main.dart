@@ -3,7 +3,7 @@ import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/views/add_employee_screen.dart';
 import 'package:get/get.dart';
 
-
+// Initial comment
 void main() {
   runApp(const HotelManager());
 }
