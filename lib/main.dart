@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/views/add_employee_screen.dart';
-import 'package:get/get.dart';
-import 'package:hotel_manager/views/loading_screen.dart';
 import 'package:hotel_manager/views/login_screen.dart';
-import 'package:hotel_manager/views/manage_staff_screen.dart';
-import 'package:hotel_manager/views/profile_screen.dart';
-import 'package:hotel_manager/views/reviews_screen.dart';
+import 'package:get/get.dart';
+
 
 void main() {
   runApp(const HotelManager());
@@ -24,7 +21,7 @@ class HotelManager extends StatelessWidget {
         colorScheme: ColorScheme.light(primary: ColourConstants.mainBlue),
         useMaterial3: true,
       ),
-      home: AddEmployeeScreen(),
+      home: LoginScreen(),
     );
   }
 }
