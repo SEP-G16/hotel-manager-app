@@ -3,6 +3,8 @@ import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/views/add_employee_screen.dart';
 import 'package:get/get.dart';
 import 'package:hotel_manager/views/add_reservation.dart';
+import 'package:hotel_manager/views/reservation_details.dart';
+
 
 // Initial comment
 void main() {
@@ -21,7 +23,7 @@ class HotelManager extends StatelessWidget {
         colorScheme: ColorScheme.light(primary: ColourConstants.mainBlue),
         useMaterial3: true,
       ),
-      home: AddReservationScreen(),
+      home: ReservationDetailsScreen(),
     );
   }
 }
