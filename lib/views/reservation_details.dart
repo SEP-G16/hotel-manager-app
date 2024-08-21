@@ -147,7 +147,8 @@ class ReservationDetailsScreen extends StatelessWidget {
 
                     // Adults and Children Count
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 345.0, vertical: 10.0),
+
+                  padding: EdgeInsets.symmetric(horizontal: 45.0, vertical: 10.0),
                     child: Row(
 
                       children: [
@@ -205,7 +206,7 @@ class ReservationDetailsScreen extends StatelessWidget {
                       ],
                     ),
                 ),
-                    SizedBox(height: 40.0),
+                    SizedBox(height: 10.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
@@ -216,11 +217,11 @@ class ReservationDetailsScreen extends StatelessWidget {
                           child: Text(
                             'Accept',
                             style: TextStyle(
-                                fontSize: 30, color: ColourConstants.richBlack),
+                                fontSize: 25, color: ColourConstants.richBlack),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: ColourConstants.green,
-                            minimumSize: Size(200, 60),
+                            minimumSize: Size(100, 60),
                           ),
                         ),
                         ElevatedButton(
@@ -230,11 +231,11 @@ class ReservationDetailsScreen extends StatelessWidget {
                           child: Text('Reject',
                               style: TextStyle(
 
-                                  fontSize: 30,
+                                  fontSize: 25,
                                   color: ColourConstants.richBlack)),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: ColourConstants.red,
-                            minimumSize: Size(200, 60),
+                            minimumSize: Size(100, 60),
                           ),
                         ),
                       ],
