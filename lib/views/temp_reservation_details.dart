@@ -9,11 +9,11 @@ import '../components/named_input_field.dart';
 import '../constants/text_constants.dart';
 import '../controllers/view/booking_tab_controller.dart';
 
-class ReservationDetailsScreen extends StatelessWidget {
-  final Room room;
+class TempReservationDetailsScreen extends StatelessWidget {
   final BookingTabController bookingTabController = Get.find<BookingTabController>();
+  final Room room;
 
-  ReservationDetailsScreen({Key? key, required this.room}) : super(key: key) {
+  TempReservationDetailsScreen({Key? key, required this.room}) : super(key: key) {
     Get.put(ReservationDetailsViewStateController());
     // Fetch or set up data related to roomId
     ReservationDetailsViewStateController.instance.selectedDate = room.checkInDate;
@@ -206,27 +206,48 @@ class ReservationDetailsScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 35.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        _showPopup(context, 'Reject');
-                        bookingTabController.cancelReservation(room);
-                        //send and email to customer
-                      },
-                      child: Text('Reject',
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: ColourConstants.richBlack)),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColourConstants.red,
-                        minimumSize: Size(100, 60),
-                      ),
+                    SizedBox(height: 10.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        ElevatedButton(
+                          onPressed: () {
+                            _showPopup(context, 'Accept');
+                             bookingTabController.moveRoomToConfirmed(room);
+                            //send and email to customer
+                          },
+                          child: Text(
+                            'Accept',
+                            style: TextStyle(
+                                fontSize: 25, color: ColourConstants.richBlack),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: ColourConstants.green,
+                            minimumSize: Size(100, 60),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            _showPopup(context, 'Reject');
+                            bookingTabController.rejectReservation(room);
+                            //send and email to customer
+                          },
+                          child: Text('Reject',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: ColourConstants.richBlack)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: ColourConstants.red,
+                            minimumSize: Size(100, 60),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 35.0),
                   ],
                 ),
-                ),
               ),
+            )
           ],
         ),
       ),
@@ -278,5 +299,3 @@ void _showPopup(BuildContext context, String action) {
     );
   }
 }
-
-
