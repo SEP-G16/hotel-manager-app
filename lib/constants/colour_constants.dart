@@ -12,7 +12,7 @@ class ColourConstants {
   static const Color white = Color(0xFFFFFFFF);
   static const Color green = Color(0xFF00FF00);
   static const Color red = Color(0xFFFF0000);
-  static const Color green = Color(0xFF47891D);
-  static const Color red = Color(0xFFFE1C07);
+  static const Color green1 = Color(0xFF47891D);
+  static const Color red1 = Color(0xFFFE1C07);
 }
 

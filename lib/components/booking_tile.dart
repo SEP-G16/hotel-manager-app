@@ -1,21 +1,23 @@
-
 import 'package:flutter/material.dart';
-import 'package:hotel_manager/constants/colour_constants.dart';
-import '../../constants/text_constants.dart';
+import 'package:get/get.dart';
+import 'package:hotel_manager/views/temp_reservation_details.dart';
+
+import '../constants/colour_constants.dart';
+import '../constants/text_constants.dart';
+import '../controllers/view/booking_tab_controller.dart'; // Import the details screen
 
 class BookingTile extends StatelessWidget {
-  final String itemName;
+  final Room room;
   final double screenWidth;
   final double screenHeight;
   final VoidCallback onPressed;
 
-  const BookingTile({
-    Key? key,
-    required this.itemName,
+  BookingTile({
+    required this.room,
     required this.screenWidth,
     required this.screenHeight,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class BookingTile extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              itemName,
+              room.number,
               style: TextConstants.mainTextStyle(
                 fontSize: screenHeight * 0.025,
               ),

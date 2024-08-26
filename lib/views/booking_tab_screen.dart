@@ -4,7 +4,11 @@ import 'package:hotel_manager/constants/colour_constants.dart';
 import '../../constants/text_constants.dart';
 import 'package:hotel_manager/controllers/view/booking_tab_controller.dart';
 import 'package:hotel_manager/components/named_drop_down_button.dart';
-import 'package:hotel_manager/components/booking_tile.dart'; // Import the BookingTile component
+import 'package:hotel_manager/components/booking_tile.dart';// Import the BookingTile component
+import 'package:hotel_manager/views/temp_reservation_details.dart';
+import 'package:hotel_manager/views/reservation_details.dart';
+
+
 
 class BookingTabScreen extends StatelessWidget {
   @override
@@ -178,11 +182,13 @@ class BookingTabScreen extends StatelessWidget {
                                 child: ListView(
                                   children: controller.filteredTemporaryRooms
                                       .map((room) => BookingTile(
-                                    itemName: room,
+                                    room: room,
                                     screenWidth: screenWidth,
                                     screenHeight: screenHeight,
                                     onPressed: () {
-                                      print('Arrow icon clicked for item: $room');
+                                      Get.to(() => TempReservationDetailsScreen(
+                                        room: room,
+                                      ));
                                     },
                                   ))
                                       .toList(),
@@ -203,11 +209,13 @@ class BookingTabScreen extends StatelessWidget {
                                 child: ListView(
                                   children: controller.filteredConfirmedRooms
                                       .map((room) => BookingTile(
-                                    itemName: room,
+                                    room: room,
                                     screenWidth: screenWidth,
                                     screenHeight: screenHeight,
                                     onPressed: () {
-                                      print('Arrow icon clicked for item: $room');
+                                      Get.to(() => ReservationDetailsScreen(
+                                        room: room,
+                                      ));
                                     },
                                   ))
                                       .toList(),

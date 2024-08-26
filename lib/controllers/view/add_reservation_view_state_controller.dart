@@ -16,5 +16,3 @@ class AddReservationViewStateController extends GetxController {
   DateTime get selectedDate => _selectedDate.value;
   set selectedDate(value) => _selectedDate.value = value;
 }
-
-
