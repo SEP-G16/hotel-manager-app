@@ -81,6 +81,13 @@ class BookingTabController extends GetxController with GetSingleTickerProviderSt
     _confirmedRooms.remove(room);
     update();
   }
+  // Inside BookingTabController
+
+  void addRoomToConfirmed(Room room) {
+    _confirmedRooms.add(room);
+    update(); // Notify listeners to rebuild
+  }
+
 }
 
 class Room {
