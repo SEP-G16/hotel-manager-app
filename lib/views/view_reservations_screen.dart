@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_manager/components/action_button.dart';
+import 'package:hotel_manager/components/booking_tile.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
+import 'package:hotel_manager/controllers/view/booking_tab_controller.dart';
 import 'package:hotel_manager/controllers/view/view_reservations_screen_tab_bar_controller.dart';
 import 'package:intl/intl.dart';
 
@@ -248,11 +250,7 @@ class ViewReservationsScreen extends StatelessWidget {
                       child: Column(
                         children: List.generate(
                           10,
-                          (index) => Container(
-                            height: 100,
-                            color: ColourConstants.richBlack,
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                          ),
+                          (index) => BookingTile(room: Room(number: '101', type: 'Standard', checkInDate: DateTime.now(), checkOutDate: DateTime.now(), adults: 2, children: 1, roomCount: 3), onPressed: (){}),
                         ),
                       ),
                     ),
