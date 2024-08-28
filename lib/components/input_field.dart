@@ -25,7 +25,7 @@ class InputField extends StatelessWidget {
     return Container(
       alignment: Alignment.centerLeft,
       width: width ?? 300,
-      height: height ?? 60,
+      // height: height ?? 60,
       decoration: BoxDecoration(
         color: ColourConstants.orchidAccent,
         borderRadius: BorderRadius.circular(10.0),
@@ -39,6 +39,8 @@ class InputField extends StatelessWidget {
         ],
       ),
       child: TextFormField(
+        maxLines: null,
+        style: TextConstants.subTextStyle(),
         readOnly: readOnly,
         initialValue: initialValue,
         onChanged: onChanged,

@@ -10,6 +10,7 @@ class NamedInputField extends StatelessWidget {
     this.height,
     this.width,
     this.readOnly = false,
+    this.initialValue
   });
 
   final String titleText;
