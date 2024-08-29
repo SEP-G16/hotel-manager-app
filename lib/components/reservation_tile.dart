@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_manager/enum/room_type.dart';
-import 'package:hotel_manager/models/booking.dart';
 import 'package:intl/intl.dart';
 
 import '../constants/colour_constants.dart';
 import '../constants/text_constants.dart';
-import '../models/booking.dart';
+import '../models/reservation.dart';
 import 'action_button.dart';
 
-class BookingTile extends StatelessWidget {
-  const BookingTile(
-      {required this.booking, required this.onArrowTap});
+class ReservationTile extends StatelessWidget {
+  const ReservationTile(
+      {required this.reservation, required this.onArrowTap});
 
-  final Booking booking;
+  final Reservation reservation;
   final void Function() onArrowTap;
 
   @override
@@ -45,7 +44,7 @@ class BookingTile extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        booking.customerName,
+                        reservation.customerName,
                         overflow: TextOverflow.ellipsis,
                         style: TextConstants.subTextStyle(fontSize: 18),
                       ),
@@ -56,7 +55,7 @@ class BookingTile extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Phone No. : ${booking.phoneNo}',
+                        'Phone No. : ${reservation.phoneNo}',
                         overflow: TextOverflow.ellipsis,
                         style: TextConstants.subTextStyle(fontSize: 16),
                       ),
@@ -67,7 +66,7 @@ class BookingTile extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Room Type : ${booking.roomType.getRoomTypeAsString()}',
+                        'Room Type : ${reservation.roomType.getRoomTypeAsString()}',
                         overflow: TextOverflow.ellipsis,
                         style: TextConstants.subTextStyle(fontSize: 16),
                       ),
@@ -78,7 +77,7 @@ class BookingTile extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Room Count : ${booking.roomCount}',
+                        'Room Count : ${reservation.roomCount}',
                         overflow: TextOverflow.ellipsis,
                         style: TextConstants.subTextStyle(fontSize: 16),
                       ),
@@ -89,7 +88,7 @@ class BookingTile extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Check In Date : ${DateFormat('yyyy/MM/dd').format(booking.checkinDate)}',
+                        'Check In Date : ${DateFormat('yyyy/MM/dd').format(reservation.checkinDate)}',
                         overflow: TextOverflow.ellipsis,
                         style: TextConstants.subTextStyle(fontSize: 16),
                       ),
@@ -100,7 +99,7 @@ class BookingTile extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Checkout Date : ${DateFormat('yyyy/MM/dd').format(booking.checkoutDate)}',
+                        'Checkout Date : ${DateFormat('yyyy/MM/dd').format(reservation.checkoutDate)}',
                         overflow: TextOverflow.ellipsis,
                         style: TextConstants.subTextStyle(fontSize: 16),
                       ),

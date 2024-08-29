@@ -41,22 +41,22 @@ class StaffTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: CircleAvatar(
-              backgroundColor: ColourConstants.mainBlue,
-              radius: 45,
-              child: CircleAvatar(
-                radius: 42.5,
-                child: imageUrl != null
-                    ? CachedNetworkImage(imageUrl: imageUrl!)
-                    : SvgPicture.string(
-                        SvgConstants.avatarImage,
-                        // height: 50,
-                      ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 10.0),
+          //   child: CircleAvatar(
+          //     backgroundColor: ColourConstants.mainBlue,
+          //     radius: 45,
+          //     child: CircleAvatar(
+          //       radius: 42.5,
+          //       child: imageUrl != null
+          //           ? CachedNetworkImage(imageUrl: imageUrl!)
+          //           : SvgPicture.string(
+          //               SvgConstants.avatarImage,
+          //               // height: 50,
+          //             ),
+          //     ),
+          //   ),
+          // ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

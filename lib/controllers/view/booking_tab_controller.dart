@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:hotel_manager/enum/room_type.dart';
+import 'package:hotel_manager/models/Reservation.dart';
+
+import '../../models/booking.dart';
 
 class BookingTabController extends GetxController with GetSingleTickerProviderStateMixin {
   late TabController tabController;
@@ -9,21 +13,21 @@ class BookingTabController extends GetxController with GetSingleTickerProviderSt
   int get selectedIndex => _selectedIndex.value;
   String get selectedRoomType => _selectedRoomType.value;
 
-  final RxList<Room> _temporaryRooms = <Room>[].obs;
-  final RxList<Room> _confirmedRooms = <Room>[].obs;
+  final RxList<Reservation> _reservations = <Reservation>[].obs;
+  final RxList<Booking> _bookings = <Booking>[].obs;
 
-  List<Room> get filteredTemporaryRooms {
+  List<Reservation> get filteredTemporaryRooms {
     if (selectedRoomType == 'All') {
-      return _temporaryRooms;
+      return _reservations;
     }
-    return _temporaryRooms.where((room) => room.type == selectedRoomType).toList();
+    return _reservations.where((room) => room.roomType.getRoomTypeAsString().toLowerCase() == selectedRoomType.toLowerCase()).toList();
   }
 
-  List<Room> get filteredConfirmedRooms {
+  List<Booking> get filteredConfirmedRooms {
     if (selectedRoomType == 'All') {
-      return _confirmedRooms;
+      return _bookings;
     }
-    return _confirmedRooms.where((room) => room.type == selectedRoomType).toList();
+    return _bookings.where((room) => room.roomType.getRoomTypeAsString().toLowerCase() == selectedRoomType.toLowerCase()).toList();
   }
 
   @override
@@ -32,21 +36,21 @@ class BookingTabController extends GetxController with GetSingleTickerProviderSt
     tabController = TabController(length: 2, vsync: this);
 
     // Initialize room data
-    _temporaryRooms.addAll([
-      Room(number: 'Room Number : 21', type: 'Standard', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 1)), adults: 2, children: 1, roomCount: 1),
-      Room(number: 'Room Number : 22', type: 'Standard', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 1)), adults: 2, children: 0, roomCount: 1),
-      Room(number: 'Room Number : 23', type: 'Standard', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 2)), adults: 1, children: 0, roomCount: 1),
-      Room(number: 'Room Number : 24', type: 'Deluxe', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 3)), adults: 2, children: 2, roomCount: 1),
-      Room(number: 'Room Number : 25', type: 'Deluxe', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 1)), adults: 3, children: 1, roomCount: 2),
-      Room(number: 'Room Number : 26', type: 'Family', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 2)), adults: 2, children: 3, roomCount: 1),
-      Room(number: 'Room Number : 27', type: 'Family', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 1)), adults: 2, children: 2, roomCount: 1),
-    ]);
-
-    _confirmedRooms.addAll([
-      Room(number: 'Room Number : 10', type: 'Standard', checkInDate: DateTime.now().subtract(Duration(days: 1)), checkOutDate: DateTime.now(), adults: 2, children: 1, roomCount: 1),
-      Room(number: 'Room Number : 11', type: 'Deluxe', checkInDate: DateTime.now().subtract(Duration(days: 1)), checkOutDate: DateTime.now(), adults: 1, children: 0, roomCount: 1),
-      Room(number: 'Room Number : 14', type: 'Family', checkInDate: DateTime.now().subtract(Duration(days: 2)), checkOutDate: DateTime.now().subtract(Duration(days: 1)), adults: 2, children: 2, roomCount: 1),
-    ]);
+    // _reservations.addAll([
+    //   R(number: 'Room Number : 21', type: 'Standard', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 1)), adults: 2, children: 1, roomCount: 1),
+    //   Room(number: 'Room Number : 22', type: 'Standard', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 1)), adults: 2, children: 0, roomCount: 1),
+    //   Room(number: 'Room Number : 23', type: 'Standard', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 2)), adults: 1, children: 0, roomCount: 1),
+    //   Room(number: 'Room Number : 24', type: 'Deluxe', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 3)), adults: 2, children: 2, roomCount: 1),
+    //   Room(number: 'Room Number : 25', type: 'Deluxe', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 1)), adults: 3, children: 1, roomCount: 2),
+    //   Room(number: 'Room Number : 26', type: 'Family', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 2)), adults: 2, children: 3, roomCount: 1),
+    //   Room(number: 'Room Number : 27', type: 'Family', checkInDate: DateTime.now(), checkOutDate: DateTime.now().add(Duration(days: 1)), adults: 2, children: 2, roomCount: 1),
+    // ]);
+    //
+    // _bookings.addAll([
+    //   Room(number: 'Room Number : 10', type: 'Standard', checkInDate: DateTime.now().subtract(Duration(days: 1)), checkOutDate: DateTime.now(), adults: 2, children: 1, roomCount: 1),
+    //   Room(number: 'Room Number : 11', type: 'Deluxe', checkInDate: DateTime.now().subtract(Duration(days: 1)), checkOutDate: DateTime.now(), adults: 1, children: 0, roomCount: 1),
+    //   Room(number: 'Room Number : 14', type: 'Family', checkInDate: DateTime.now().subtract(Duration(days: 2)), checkOutDate: DateTime.now().subtract(Duration(days: 1)), adults: 2, children: 2, roomCount: 1),
+    // ]);
 
     tabController.addListener(() {
       _selectedIndex.value = tabController.index;
@@ -66,46 +70,46 @@ class BookingTabController extends GetxController with GetSingleTickerProviderSt
   }
 
   // Method to move room from temporary to confirmed
-  void moveRoomToConfirmed(Room room) {
-    _temporaryRooms.remove(room);
-    _confirmedRooms.add(room);
+  void moveReservationToConfirmed(Reservation reservation) {
+    _reservations.remove(reservation);
+    // _bookings.add(room);
     update(); // Notify listeners to rebuild
   }
 
-  void rejectReservation(Room room){
-    _temporaryRooms.remove(room);
+  void rejectReservation(Reservation reservation){
+    _reservations.remove(reservation);
     update();
   }
 
-  void cancelReservation(Room room){
-    _confirmedRooms.remove(room);
+  void cancelBooking(Booking booking){
+    _bookings.remove(booking);
     update();
   }
   // Inside BookingTabController
 
-  void addRoomToConfirmed(Room room) {
-    _confirmedRooms.add(room);
+  void addBooking(Booking booking) {
+    _bookings.add(booking);
     update(); // Notify listeners to rebuild
   }
 
 }
 
-class Room {
-  final String number;
-  final String type;
-  final DateTime checkInDate;
-  final DateTime checkOutDate;
-  final int adults;
-  final int children;
-  final int roomCount;
-
-  Room({
-    required this.number,
-    required this.type,
-    required this.checkInDate,
-    required this.checkOutDate,
-    required this.adults,
-    required this.children,
-    required this.roomCount,
-  });
-}
+// class Room {
+//   final String number;
+//   final String type;
+//   final DateTime checkInDate;
+//   final DateTime checkOutDate;
+//   final int adults;
+//   final int children;
+//   final int roomCount;
+//
+//   Room({
+//     required this.number,
+//     required this.type,
+//     required this.checkInDate,
+//     required this.checkOutDate,
+//     required this.adults,
+//     required this.children,
+//     required this.roomCount,
+//   });
+// }

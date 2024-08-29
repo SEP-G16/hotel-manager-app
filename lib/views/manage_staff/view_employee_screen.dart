@@ -6,31 +6,22 @@ import 'package:hotel_manager/controllers/view/view_employee_screen_state_contro
 import 'package:hotel_manager/models/employee.dart';
 import 'package:intl/intl.dart';
 
-import '../components/action_button.dart';
-import '../components/named_date_input_field.dart';
-import '../components/named_drop_down_button.dart';
-import '../components/named_input_field.dart';
-import '../constants/svg_constants.dart';
-import '../constants/text_constants.dart';
+import '../../components/action_button.dart';
+import '../../components/named_date_input_field.dart';
+import '../../components/named_drop_down_button.dart';
+import '../../components/named_input_field.dart';
+import '../../constants/svg_constants.dart';
+import '../../constants/text_constants.dart';
 
 /// Screen for viewing employee info
 /// Required Arguments
 ///   employee : Employee
 class ViewEmployeeScreen extends StatelessWidget {
   ViewEmployeeScreen(
-      // {required this.employee}
+      {required this.employee}
       );
 
-  final Employee employee = Employee(
-      id: 1,
-      name: 'John Smith',
-      role: 'Assistant Manager',
-      gender: 'Male',
-      dateOfBirth: DateTime(2001, 6, 19),
-      address: '16, Willow Street, Manchester, London',
-      phoneNo: '0123456789',
-      email: 'johnsmith@example.com');
-
+  final Employee employee;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -55,7 +46,9 @@ class ViewEmployeeScreen extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Get.back();
+                              },
                               child: Icon(
                                 Icons.arrow_back_ios_new_rounded,
                                 color: ColourConstants.mainBlue,
@@ -95,39 +88,39 @@ class ViewEmployeeScreen extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 80,
-                              backgroundColor: ColourConstants.mainBlue,
-                              child: CircleAvatar(
-                                radius: 75,
-                                child: SvgPicture.string(
-                                  SvgConstants.avatarImage,
-                                ),
-                              ),
-                            ),
-
-                            //Add if functionality is required
-
-                            // Positioned(
-                            //   bottom: 0,
-                            //   right: 10,
-                            //   child: GestureDetector(
-                            //     onTap: () {},
-                            //     child: CircleAvatar(
-                            //       radius: 20,
-                            //       backgroundColor: ColourConstants.mainBlue,
-                            //       child: Icon(
-                            //         Icons.edit,
-                            //         color: Colors.white,
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                          ],
-                        ),
+                        // Stack(
+                        //   alignment: Alignment.center,
+                        //   children: [
+                        //     CircleAvatar(
+                        //       radius: 80,
+                        //       backgroundColor: ColourConstants.mainBlue,
+                        //       child: CircleAvatar(
+                        //         radius: 75,
+                        //         child: SvgPicture.string(
+                        //           SvgConstants.avatarImage,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //
+                        //     //Add if functionality is required
+                        //
+                        //     // Positioned(
+                        //     //   bottom: 0,
+                        //     //   right: 10,
+                        //     //   child: GestureDetector(
+                        //     //     onTap: () {},
+                        //     //     child: CircleAvatar(
+                        //     //       radius: 20,
+                        //     //       backgroundColor: ColourConstants.mainBlue,
+                        //     //       child: Icon(
+                        //     //         Icons.edit,
+                        //     //         color: Colors.white,
+                        //     //       ),
+                        //     //     ),
+                        //     //   ),
+                        //     // ),
+                        //   ],
+                        // ),
                         Obx(
                           () => NamedInputField(
                             titleText: 'Name',
@@ -259,10 +252,15 @@ class ViewEmployeeScreen extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
                               child:
-                                  ActionButton(btnText: 'Save', onTap: () {}),
+                                  ActionButton(btnText: 'Save', onTap: () {
+                                    //TODO: validate data
+                                    //TODO: controller.saveData();
+                                    controller.editMode = false;
+                                  },),
                             ),
                           ),
                         ),
+                        SizedBox(height: 10,),
                       ],
                     ),
                   ),

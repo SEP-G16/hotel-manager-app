@@ -8,9 +8,9 @@ import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/controllers/view/add_employee_view_state_controller.dart';
 import 'package:intl/intl.dart';
 
-import '../components/named_input_field.dart';
-import '../constants/svg_constants.dart';
-import '../constants/text_constants.dart';
+import '../../components/named_input_field.dart';
+import '../../constants/svg_constants.dart';
+import '../../constants/text_constants.dart';
 
 import 'package:get/get.dart';
 
@@ -58,36 +58,36 @@ class AddEmployeeScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          CircleAvatar(
-                            radius: 80,
-                            backgroundColor: ColourConstants.mainBlue,
-                            child: CircleAvatar(
-                              radius: 75,
-                              child: SvgPicture.string(
-                                SvgConstants.avatarImage,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 10,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: CircleAvatar(
-                                radius: 20,
-                                backgroundColor: ColourConstants.mainBlue,
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Stack(
+                      //   alignment: Alignment.center,
+                      //   children: [
+                      //     CircleAvatar(
+                      //       radius: 80,
+                      //       backgroundColor: ColourConstants.mainBlue,
+                      //       child: CircleAvatar(
+                      //         radius: 75,
+                      //         child: SvgPicture.string(
+                      //           SvgConstants.avatarImage,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Positioned(
+                      //       bottom: 0,
+                      //       right: 10,
+                      //       child: GestureDetector(
+                      //         onTap: () {},
+                      //         child: CircleAvatar(
+                      //           radius: 20,
+                      //           backgroundColor: ColourConstants.mainBlue,
+                      //           child: Icon(
+                      //             Icons.add,
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       NamedInputField(titleText: 'Name', onChanged: (value) {}),
 
                       //Role Dropdown

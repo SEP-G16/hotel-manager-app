@@ -11,6 +11,7 @@ class NamedDropDownButton extends StatelessWidget {
     required this.onChanged,
     this.itemList,
     this.width,
+    this.titleTextStyle,
   });
 
   final String titleText;
@@ -19,18 +20,19 @@ class NamedDropDownButton extends StatelessWidget {
   void Function(dynamic value)? onChanged;
   List<DropdownMenuItem<Object>>? itemList;
   double? width;
+  TextStyle? titleTextStyle;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width ?? 300,
-      margin: EdgeInsets.symmetric(vertical: 10.0),
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             titleText,
-            style: TextConstants.mainTextStyle(fontSize: 25),
+            style: titleTextStyle ?? TextConstants.mainTextStyle(fontSize: 25),
           ),
           SizedBox(
             height: 5.0,

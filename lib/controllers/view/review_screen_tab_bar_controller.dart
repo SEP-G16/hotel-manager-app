@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-class ViewReservationsScreenTabBarController extends GetxController with GetSingleTickerProviderStateMixin {
+class ReviewScreenTabBarController extends GetxController with GetSingleTickerProviderStateMixin {
   late TabController tabController;
   RxInt _selectedIndex = 0.obs;
   int get selectedIndex => _selectedIndex.value;

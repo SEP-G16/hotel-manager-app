@@ -5,6 +5,8 @@ import 'package:hotel_manager/components/input_field.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/constants/svg_constants.dart';
 import 'package:hotel_manager/constants/text_constants.dart';
+import 'package:hotel_manager/views/loading_screen.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -36,7 +38,10 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(height: 20.0,),
                   InputField(labelText: 'Password', onChanged: (value){}),
                   SizedBox(height: 20.0,),
-                  ActionButton(btnText: 'Login', onTap: (){}),
+                  ActionButton(btnText: 'Login', onTap: (){
+                    //TODO:Edit
+                    Get.to(() => LoadingScreen());
+                  }),
                 ],
               ),
             ),

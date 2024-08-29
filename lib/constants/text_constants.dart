@@ -19,5 +19,4 @@ class TextConstants {
         fontFamily: 'Altone Trial'
     );
   }
-
 }

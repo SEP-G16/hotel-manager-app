@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:hotel_manager/components/action_button.dart';
 import 'package:hotel_manager/components/review_tile.dart';
 import 'package:hotel_manager/components/staff_tile.dart';
 import 'package:hotel_manager/constants/svg_constants.dart';
+import 'package:hotel_manager/models/employee.dart';
+import 'package:hotel_manager/views/manage_staff/view_employee_screen.dart';
 
-import '../constants/colour_constants.dart';
-import '../constants/text_constants.dart';
+import '../../constants/colour_constants.dart';
+import '../../constants/text_constants.dart';
 
 class ManageStaffScreen extends StatelessWidget {
   const ManageStaffScreen({super.key});
@@ -26,7 +29,9 @@ class ManageStaffScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Get.back();
+                      },
                       child: Icon(
                         Icons.arrow_back_ios_new_rounded,
                         color: ColourConstants.mainBlue,
@@ -97,14 +102,31 @@ class ManageStaffScreen extends StatelessWidget {
                 child: Column(
                   children: List.generate(
                     10,
-                    (_) => StaffTile(
+                    (_) => Employee(
+                      id: _,
                       name: 'Emily Smith',
-                      role: 'Ast. Manager',
-                      phoneNo: '0771234567',
-                      onInfoPressed: () {},
-                      onFirePressed: () {},
+                      role: 'Assistant Manager',
+                      gender: 'Female',
+                      dateOfBirth:
+                          DateTime.now().subtract(Duration(days: 365 * 20)),
+                      address: '16, Willow Street, Manchester, UK',
+                      phoneNo: '0776551234',
+                      email: 'emilys@example.com',
                     ),
-                  ),
+                  )
+                      .map<Widget>(
+                        (employee) => StaffTile(
+                          name: employee.name,
+                          role: employee.role,
+                          phoneNo: employee.phoneNo,
+                          onInfoPressed: () {
+                            Get.to(
+                                () => ViewEmployeeScreen(employee: employee));
+                          },
+                          onFirePressed: () {},
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ),
