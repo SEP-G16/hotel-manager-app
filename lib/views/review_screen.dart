@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_manager/components/action_button.dart';
-import 'package:hotel_manager/components/booking_tile.dart';
-import 'package:hotel_manager/components/named_date_input_field.dart';
-import 'package:hotel_manager/components/named_drop_down_button.dart';
+import 'package:hotel_manager/components/loading_dialog.dart';
+import 'package:hotel_manager/components/message_dialog_box.dart';
 import 'package:hotel_manager/components/review_tile.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
-import 'package:hotel_manager/controllers/view/booking_tab_controller.dart';
-import 'package:hotel_manager/controllers/view/manage_reservations_screen_tab_bar_controller.dart';
+import 'package:hotel_manager/controllers/data/review_data_controller.dart';
 import 'package:hotel_manager/enum/review_status.dart';
-import 'package:hotel_manager/enum/room_type.dart';
-import 'package:hotel_manager/models/booking.dart';
-import 'package:hotel_manager/models/reservation.dart';
 import 'package:hotel_manager/models/review.dart';
-import 'package:hotel_manager/models/room.dart';
-import 'package:hotel_manager/views/manage_reservations/bookings_tab_bar_view.dart';
-import 'package:hotel_manager/views/manage_reservations/temp_booking_tab_bar_view.dart';
-import 'package:intl/intl.dart';
 
 import '../../constants/text_constants.dart';
 import '../controllers/view/review_screen_tab_bar_controller.dart';
@@ -156,29 +147,110 @@ class ReviewScreen extends StatelessWidget {
                         onRefresh: () async {
                           await Future.delayed(Duration(seconds: 1));
                         },
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: List.generate(
-                                    5,
-                                    (_) => Review(
-                                        id: _,
-                                        name: 'Sarah Conner',
-                                        feedback:
-                                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare dolor in massa auctor placerat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
-                                        createdAt: DateTime.now().subtract(
-                                          Duration(
-                                            days: _,
-                                          ),
-                                        ),
-                                        status: ReviewStatus.Pending))
-                                .map<ReviewTile>(
-                                  (review) => ReviewTile(
-                                    review: review,
-                                    onAcceptTap: () {},
-                                    onRejectTap: () {},
-                                  ),
-                                )
-                                .toList(),
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            try{
+                              await ReviewDataController.instance.reinitController();
+                            }catch(e){
+                              MessageDialogBox(message: 'An Unexpected Error Occurred');
+                            }
+                          },
+                          child: SingleChildScrollView(
+                            child: Obx(
+                              () => Column(
+                                children: ReviewDataController
+                                    .instance.tempReviewList
+                                    .map<ReviewTile>(
+                                      (review) => ReviewTile(
+                                        review: review,
+                                        onAcceptTap: () async {
+                                          LoadingDialog(
+                                            callerFunction: () async {
+                                              await ReviewDataController.instance
+                                                  .acceptReview(
+                                                tempReviewId: review.id,
+                                              );
+                                            },
+                                            onErrorCallBack: (e)
+                                              {
+                                                print(e.toString());
+                                                Get.dialog(Dialog(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    padding: EdgeInsets.all(20.0),
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Text('An Unexpected Error Occurred'),
+                                                        SizedBox(height: 20,),
+                                                        ActionButton(btnText: 'OK', onTap: (){
+                                                          Get.back();
+                                                        }),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),);
+                                              }
+                                          );
+                                        },
+                                        onRejectTap: () {
+                                          Get.dialog(
+                                            Dialog(
+                                              child: Container(
+                                                padding: EdgeInsets.all(10.0),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      'Are you sure you want to reject this review?',
+                                                      style: TextConstants
+                                                          .subTextStyle(),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    ActionButton(
+                                                      outlineMode: true,
+                                                      borderColour:
+                                                          ColourConstants.red1,
+                                                      borderWidth: 2.0,
+                                                      btnText: 'Yes',
+                                                      fontSize: 18,
+                                                      onTap: () {
+                                                        //TODO: review remove functionality
+                                                      },
+                                                      height: 40,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    ActionButton(
+                                                      outlineMode: true,
+                                                      borderColour:
+                                                          ColourConstants
+                                                              .chineseBlack,
+                                                      borderWidth: 2.0,
+                                                      btnText: 'No',
+                                                      fontSize: 18,
+                                                      height: 40,
+                                                      onTap: () {
+                                                        Get.back();
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -187,25 +259,16 @@ class ReviewScreen extends StatelessWidget {
                           await Future.delayed(Duration(seconds: 1));
                         },
                         child: SingleChildScrollView(
-                          child: Column(
-                            children: List.generate(
-                                    15,
-                                    (_) => Review(
-                                        id: _,
-                                        name: 'Sarah Conner',
-                                        feedback: 'Nice!',
-                                        createdAt: DateTime.now().subtract(
-                                          Duration(
-                                            days: _,
-                                          ),
-                                        ),
-                                        status: ReviewStatus.Accepted))
-                                .map<ReviewTile>(
-                                  (review) => ReviewTile(
-                                    review: review,
-                                  ),
-                                )
-                                .toList(),
+                          child: Obx(
+                            () => Column(
+                              children: ReviewDataController.instance.reviewList
+                                  .map<ReviewTile>(
+                                    (review) => ReviewTile(
+                                      review: review,
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                           ),
                         ),
                       ),

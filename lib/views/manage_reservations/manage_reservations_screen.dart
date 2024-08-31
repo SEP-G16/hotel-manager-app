@@ -16,6 +16,7 @@ import 'package:hotel_manager/views/manage_reservations/temp_booking_tab_bar_vie
 import 'package:intl/intl.dart';
 
 import '../../constants/text_constants.dart';
+import '../../controllers/data/booking_data_controller.dart';
 
 class ManageReservationsScreen extends StatelessWidget {
   const ManageReservationsScreen({super.key});
@@ -224,26 +225,7 @@ class ManageReservationsScreen extends StatelessWidget {
                     controller: controller.tabController,
                     children: [
                       TempBookingTabBarView(
-                        reservations: List.generate(
-                          5,
-                          (index) => Reservation(
-                            id: 1,
-                            createdAt:
-                                DateTime.now().add(Duration(hours: index)),
-                            customerName: 'Michael Clark',
-                            phoneNo: '0771234567',
-                            roomType: RoomType.Family,
-                            roomCount: 3,
-                            checkinDate:
-                                DateTime.now().add(Duration(days: index)),
-                            checkoutDate:
-                                DateTime.now().add(Duration(days: index * 2)),
-                            adultCount: 5,
-                            childrenCount: 3,
-                            email: 'michaelclark@example.com',
-                            totalAmount: 12000.0,
-                          ),
-                        ),
+                        reservations: BookingDataController.instance.tempBookingList,
                       ),
                       BookingsTabBarView(
                         bookings: List.generate(

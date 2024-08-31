@@ -45,8 +45,10 @@ class InputField extends StatelessWidget {
         initialValue: initialValue,
         onChanged: onChanged,
         decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: TextConstants.subTextStyle(),
+          labelText: 'Type ${labelText}',
+          labelStyle: TextConstants.subTextStyle(
+            color: ColourConstants.chineseBlack.withOpacity(0.6),
+          ),
           contentPadding: EdgeInsets.all(20.0),
           isCollapsed: true,
           isDense: true,

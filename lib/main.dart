@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:get/get.dart';
+import 'package:hotel_manager/views/loading_screen.dart';
 import 'package:hotel_manager/views/login_screen.dart';
 
 
@@ -21,7 +22,7 @@ class HotelManager extends StatelessWidget {
         colorScheme: ColorScheme.light(primary: ColourConstants.mainBlue),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: LoadingScreen(),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:hotel_manager/components/review_tile.dart';
 import 'package:hotel_manager/components/staff_tile.dart';
 import 'package:hotel_manager/constants/svg_constants.dart';
 import 'package:hotel_manager/models/employee.dart';
+import 'package:hotel_manager/views/manage_staff/add_employee_screen.dart';
 import 'package:hotel_manager/views/manage_staff/view_employee_screen.dart';
 
 import '../../constants/colour_constants.dart';
@@ -123,7 +124,53 @@ class ManageStaffScreen extends StatelessWidget {
                             Get.to(
                                 () => ViewEmployeeScreen(employee: employee));
                           },
-                          onFirePressed: () {},
+                          onFirePressed: () {
+                            Get.dialog(
+                              Dialog(
+                                child: Container(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Are you sure you want to fire ${employee.name}?',
+                                        style: TextConstants.subTextStyle(),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      ActionButton(
+                                        outlineMode: true,
+                                        borderColour: ColourConstants.red1,
+                                        borderWidth: 2.0,
+                                        btnText: 'Fire Employee',
+                                        fontSize: 18,
+                                        onTap: () {
+                                          //TODO: employee remove functionality
+                                        },
+                                        height: 40,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      ActionButton(
+                                        outlineMode: true,
+                                        borderColour:
+                                            ColourConstants.chineseBlack,
+                                        borderWidth: 2.0,
+                                        btnText: 'Cancel',
+                                        fontSize: 18,
+                                        height: 40,
+                                        onTap: () {
+                                          Get.back();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       )
                       .toList(),
@@ -134,7 +181,9 @@ class ManageStaffScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 10.0),
               child: ActionButton(
                 btnText: 'Add Employee',
-                onTap: () {},
+                onTap: () => Get.to(() => AddEmployeeScreen()),
+                outlineMode: true,
+                borderWidth: 2.0,
                 width: 180,
               ),
             ),

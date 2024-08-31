@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/controllers/view/view_employee_screen_state_controller.dart';
 import 'package:hotel_manager/models/employee.dart';
+import 'package:hotel_manager/models/form_valid_response.dart';
 import 'package:intl/intl.dart';
 
 import '../../components/action_button.dart';
@@ -17,9 +18,7 @@ import '../../constants/text_constants.dart';
 /// Required Arguments
 ///   employee : Employee
 class ViewEmployeeScreen extends StatelessWidget {
-  ViewEmployeeScreen(
-      {required this.employee}
-      );
+  ViewEmployeeScreen({required this.employee});
 
   final Employee employee;
   @override
@@ -141,7 +140,9 @@ class ViewEmployeeScreen extends StatelessWidget {
                                     titleText: 'Role',
                                     value: 1,
                                     selectOptionValue: 1,
-                                    onChanged: (value) {},
+                                    onChanged: (value) {
+                              controller.role = value;
+                            },
                                     itemList: List.generate(
                                       10,
                                       (index) => DropdownMenuItem(
@@ -154,7 +155,7 @@ class ViewEmployeeScreen extends StatelessWidget {
                                   )
                                 : NamedInputField(
                                     titleText: 'Role',
-                                    onChanged: (value) {},
+                                    onChanged: (value){},
                                     initialValue: employee.role,
                                     readOnly: true,
                                   );
@@ -168,7 +169,7 @@ class ViewEmployeeScreen extends StatelessWidget {
                                 titleText: 'Gender',
                                 value: '',
                                 selectOptionValue: '',
-                                onChanged: (value) {},
+                                onChanged: (value) {controller.gender = value;},
                                 itemList: ['Male', 'Female']
                                     .map<DropdownMenuItem<String>>(
                                       (gender) => DropdownMenuItem(
@@ -185,8 +186,7 @@ class ViewEmployeeScreen extends StatelessWidget {
                               return NamedInputField(
                                 titleText: 'Gender',
                                 onChanged: (value) {},
-                                initialValue:
-                                    employee.gender,
+                                initialValue: employee.gender,
                                 readOnly: true,
                               );
                             }
@@ -207,6 +207,7 @@ class ViewEmployeeScreen extends StatelessWidget {
                                   );
                                   if (selectedDate != null) {
                                     //Add date change logic here with the controller
+                                    controller.dateOfBirth = selectedDate;
                                   }
                                 },
                                 selectedDate: employee.dateOfBirth,
@@ -224,7 +225,9 @@ class ViewEmployeeScreen extends StatelessWidget {
                         Obx(
                           () => NamedInputField(
                             titleText: 'Address',
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              controller.address = value;
+                            },
                             initialValue: employee.address,
                             readOnly: !controller.editMode,
                           ),
@@ -232,7 +235,9 @@ class ViewEmployeeScreen extends StatelessWidget {
                         Obx(
                           () => NamedInputField(
                             titleText: 'Phone No.',
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              controller.phoneNo = value;
+                            },
                             initialValue: employee.phoneNo,
                             readOnly: !controller.editMode,
                           ),
@@ -240,7 +245,9 @@ class ViewEmployeeScreen extends StatelessWidget {
                         Obx(
                           () => NamedInputField(
                             titleText: 'Email',
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              controller.email = value;
+                            },
                             initialValue: employee.email,
                             readOnly: !controller.editMode,
                           ),
@@ -251,16 +258,56 @@ class ViewEmployeeScreen extends StatelessWidget {
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
-                              child:
-                                  ActionButton(btnText: 'Save', onTap: () {
-                                    //TODO: validate data
-                                    //TODO: controller.saveData();
-                                    controller.editMode = false;
-                                  },),
+                              child: ActionButton(
+                                btnText: 'Save',
+                                onTap: () {
+                                  FormValidResponse response = controller.validateForm();
+                                  if(!response.formValid)
+                                    {
+                                      Get.dialog(
+                                        Dialog(
+                                          child: Container(
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  response.message ?? 'Invalid Form',
+                                                  style: TextConstants.subTextStyle(),
+                                                ),
+                                                SizedBox(
+                                                  height: 20,),
+                                                ActionButton(
+                                                  outlineMode: true,
+                                                  borderColour:
+                                                  ColourConstants.chineseBlack,
+                                                  borderWidth: 2.0,
+                                                  btnText: 'Go Back',
+                                                  fontSize: 18,
+                                                  height: 40,
+                                                  onTap: () {
+                                                    Get.back();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  else
+                                    {
+                                      //TODO: controller.saveData();
+                                      controller.editMode = false;
+                                    }
+                                },
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                       ],
                     ),
                   ),

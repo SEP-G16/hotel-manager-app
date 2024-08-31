@@ -206,11 +206,57 @@ class ViewBookingScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: ActionButton(
-                        btnText: 'Cancel Reservation',
+                        btnText: 'Cancel Booking',
                         outlineMode: true,
                         borderColour: ColourConstants.red1,
                         borderWidth: 2.0,
-                        onTap: () {},
+                        onTap: () {
+                          Get.dialog(
+                            Dialog(
+                              child: Container(
+                                padding: EdgeInsets.all(10.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Are you sure you want to cancel this booking?',
+                                      style: TextConstants.subTextStyle(),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    ActionButton(
+                                      outlineMode: true,
+                                      borderColour: ColourConstants.red1,
+                                      borderWidth: 2.0,
+                                      btnText: 'Yes',
+                                      fontSize: 18,
+                                      onTap: () {
+                                        //TODO: booking remove functionality
+                                      },
+                                      height: 40,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    ActionButton(
+                                      outlineMode: true,
+                                      borderColour:
+                                      ColourConstants.chineseBlack,
+                                      borderWidth: 2.0,
+                                      btnText: 'No',
+                                      fontSize: 18,
+                                      height: 40,
+                                      onTap: () {
+                                        Get.back();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                         width: 250,
                       ),
                     ),

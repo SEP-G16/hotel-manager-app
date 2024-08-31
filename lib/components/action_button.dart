@@ -14,13 +14,11 @@ class ActionButton extends StatelessWidget {
     this.fontSize,
     this.outlineMode = false,
     this.borderColour,
-    this.borderWidth = 0.0,
+    this.borderWidth = 1.0,
     this.fontWeight,
     this.outlineModeHoverColour,
     this.outlineModeTextColour,
-  }){
-    assert(outlineMode ? borderColour != null && borderWidth !=  0.0 : true, "outlineMode cannot be true without borderColour");
-  }
+  });
 
   final String btnText;
   final Function() onTap;
@@ -41,7 +39,7 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: outlineMode ? borderColour! : Colors.transparent, width: borderWidth, strokeAlign: BorderSide.strokeAlignOutside),
+        border: Border.all(color: outlineMode ? borderColour ?? ColourConstants.mainBlue : Colors.transparent, width: borderWidth, strokeAlign: BorderSide.strokeAlignOutside),
         borderRadius: BorderRadius.circular(10.0),
       ),
       height: height ?? 60,
@@ -64,7 +62,7 @@ class ActionButton extends StatelessWidget {
               btnText,
               textAlign: TextAlign.center,
               style: TextConstants.subTextStyle(
-                color: outlineMode ? outlineModeTextColour ?? borderColour : textColor ?? ColourConstants.white,
+                color: outlineMode ? outlineModeTextColour ?? borderColour ?? ColourConstants.mainBlue : textColor ?? ColourConstants.white,
                 fontSize: fontSize ?? 22,
                 fontWeight: fontWeight ?? FontWeight.w600,
               ),

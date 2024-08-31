@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/constants/text_constants.dart';
+import 'package:hotel_manager/controller_initalizer.dart';
 import 'package:hotel_manager/views/dashboard_screen.dart';
 
 class LoadingScreen extends StatelessWidget {
@@ -8,7 +9,11 @@ class LoadingScreen extends StatelessWidget {
 
   Future<String> load() async
   {
-    await Future.delayed(Duration(seconds: 1));
+    if(ControllerInitializer.initialised)
+      {
+        return '';
+      }
+    await ControllerInitializer.initController();
     return '';
   }
 

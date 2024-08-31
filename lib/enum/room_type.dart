@@ -1,5 +1,5 @@
 enum RoomType{
-  Standard, Deuluxe, Family
+  Standard, Deluxe, Family
 }
 
 extension RoomTypeExtension on RoomType{
