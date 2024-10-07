@@ -2,7 +2,7 @@ import 'package:hotel_manager/enum/room_type.dart';
 
 class Room {
   final int id;
-  final String roomNo;
+  final int roomNo;
   final RoomType roomType;
 
   Room({
@@ -16,7 +16,9 @@ class Room {
     return {
       'id': id,
       'roomNo': roomNo,
-      'roomType': roomType.index,
+      'roomType': {
+        'id': roomType.getTypeId(),
+      },
     };
   }
 
@@ -25,7 +27,15 @@ class Room {
     return Room(
       id: map['id'],
       roomNo: map['roomNo'],
-      roomType: RoomType.values[map['roomType']],
+      roomType: RoomType.values.firstWhere((roomType) => roomType.getRoomTypeAsString() == map['roomType']['type']),
+    );
+  }
+
+  factory Room.fromAvailabilityMap(Map<String, dynamic> map) {
+    return Room(
+      id: map['roomId'],
+      roomNo: map['roomNo'],
+      roomType: RoomType.values.firstWhere((roomType) => roomType.getRoomTypeAsString() == map['roomType']),
     );
   }
 }
