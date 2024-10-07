@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_manager/components/action_button.dart';
+import 'package:hotel_manager/components/custom_drawer.dart';
 import 'package:hotel_manager/components/loading_dialog.dart';
 import 'package:hotel_manager/components/message_dialog_box.dart';
 import 'package:hotel_manager/components/review_tile.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/controllers/data/review_data_controller.dart';
+import 'package:hotel_manager/controllers/view/drawer_state_controller.dart';
 import 'package:hotel_manager/enum/review_status.dart';
 import 'package:hotel_manager/models/review.dart';
 
@@ -17,6 +19,7 @@ class ReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DrawerStateController.instance.selectedIndex = 2;
     Size deviceSize = MediaQuery.of(context).size;
     double deviceHeight = deviceSize.height;
     double deviceWidth = deviceSize.width;
@@ -26,6 +29,7 @@ class ReviewScreen extends StatelessWidget {
       builder: (controller) => GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
+          drawer: CustomDrawer(),
           backgroundColor: ColourConstants.ivory,
           body: SafeArea(
             child: Column(
@@ -38,16 +42,18 @@ class ReviewScreen extends StatelessWidget {
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.back();
-                          },
-                          child: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            color: ColourConstants.mainBlue,
-                            size: 30,
-                          ),
-                        ),
+                        child: Builder(builder: (context) {
+                          return GestureDetector(
+                            onTap: () {
+                              Scaffold.of(context).openDrawer();
+                            },
+                            child: Icon(
+                              Icons.menu_rounded,
+                              color: ColourConstants.richBlack,
+                              size: 30,
+                            ),
+                          );
+                        }),
                       ),
                       Align(
                         alignment: Alignment.center,
@@ -149,51 +155,71 @@ class ReviewScreen extends StatelessWidget {
                         },
                         child: RefreshIndicator(
                           onRefresh: () async {
-                            try{
-                              await ReviewDataController.instance.reinitController();
-                            }catch(e){
-                              MessageDialogBox(message: 'An Unexpected Error Occurred');
+                            try {
+                              await ReviewDataController.instance
+                                  .reinitController();
+                            } catch (e) {
+                              MessageDialogBox(
+                                  message: 'An Unexpected Error Occurred');
                             }
                           },
                           child: SingleChildScrollView(
                             child: Obx(
                               () => Column(
                                 children: ReviewDataController
-                                    .instance.tempReviewList
+                                    .instance.reviewList
+                                    .where((review) =>
+                                        review.status == ReviewStatus.Pending)
+                                    .toList()
                                     .map<ReviewTile>(
                                       (review) => ReviewTile(
                                         review: review,
                                         onAcceptTap: () async {
                                           LoadingDialog(
-                                            callerFunction: () async {
-                                              await ReviewDataController.instance
-                                                  .acceptReview(
-                                                tempReviewId: review.id,
-                                              );
-                                            },
-                                            onErrorCallBack: (e)
-                                              {
-                                                print(e.toString());
-                                                Get.dialog(Dialog(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    ),
-                                                    padding: EdgeInsets.all(20.0),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Text('An Unexpected Error Occurred'),
-                                                        SizedBox(height: 20,),
-                                                        ActionButton(btnText: 'OK', onTap: (){
-                                                          Get.back();
-                                                        }),
-                                                      ],
-                                                    ),
+                                              callerFunction: () async {
+                                            await ReviewDataController.instance
+                                                .acceptReview(
+                                              tempReviewId: review.id,
+                                            );
+                                          }, onErrorCallBack: (e) {
+                                            print(e.toString());
+                                            Get.dialog(
+                                              Dialog(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
                                                   ),
-                                                ),);
-                                              }
+                                                  padding: EdgeInsets.all(20.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                          'An Unexpected Error Occurred'),
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      ActionButton(
+                                                          btnText: 'OK',
+                                                          onTap: () {
+                                                            Get.back();
+                                                          }),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                          Get.snackbar(
+                                            'Review accepted successfully',
+                                            'Review was accepted successfully',
+                                            backgroundColor:
+                                            ColourConstants.green1,
+                                            colorText:
+                                            ColourConstants.ivory,
                                           );
                                         },
                                         onRejectTap: () {
@@ -202,7 +228,8 @@ class ReviewScreen extends StatelessWidget {
                                               child: Container(
                                                 padding: EdgeInsets.all(10.0),
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     Text(
                                                       'Are you sure you want to reject this review?',
@@ -246,6 +273,9 @@ class ReviewScreen extends StatelessWidget {
                                             ),
                                           );
                                         },
+                                        onAcceptErrorCallBack: (e){
+                                          Get.snackbar('Error', e.toString());
+                                        },
                                       ),
                                     )
                                     .toList(),
@@ -262,6 +292,9 @@ class ReviewScreen extends StatelessWidget {
                           child: Obx(
                             () => Column(
                               children: ReviewDataController.instance.reviewList
+                                  .where((review) =>
+                                      review.status == ReviewStatus.Approved)
+                                  .toList()
                                   .map<ReviewTile>(
                                     (review) => ReviewTile(
                                       review: review,
