@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_manager/components/action_button.dart';
+import 'package:hotel_manager/controllers/view/manage_reservartions_screen_state_controller.dart';
 import 'package:hotel_manager/views/manage_reservations/add_booking_screen.dart';
 import 'package:hotel_manager/views/manage_reservations/view_booking_screen.dart';
 
@@ -69,14 +70,17 @@ class BookingsTabBarView extends StatelessWidget {
         ),
         Expanded(
           child: SingleChildScrollView(
-            child: Column(
-              children: bookings
-                  .map<BookingTile>((booking) => BookingTile(
-                      booking: booking,
-                      onArrowTap: () {
-                        Get.to(() => ViewBookingScreen(booking: booking));
-                      }))
-                  .toList(),
+            child: Obx(
+              () => Column(
+                children:
+                    ManageReservationsScreenStateController.instance.bookingList
+                        .map<BookingTile>((booking) => BookingTile(
+                            booking: booking,
+                            onArrowTap: () {
+                              Get.to(() => ViewBookingScreen(booking: booking));
+                            }))
+                        .toList(),
+              ),
             ),
           ),
         ),
