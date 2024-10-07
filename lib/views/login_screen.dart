@@ -5,6 +5,7 @@ import 'package:hotel_manager/components/input_field.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/constants/svg_constants.dart';
 import 'package:hotel_manager/constants/text_constants.dart';
+import 'package:hotel_manager/controllers/data/auth_controller.dart';
 import 'package:hotel_manager/views/loading_screen.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,10 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    String? email;
+    String? password;
+
     return Scaffold(
       backgroundColor: ColourConstants.ivory,
       body: GestureDetector(
@@ -24,7 +29,7 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 children: [
                   SvgPicture.string(
-                    SvgConstants.hotelImage,
+                    SvgConstants.loginScreenImage,
                     height: 300,
                   ),
                   SizedBox(height: 20.0,),
@@ -34,13 +39,31 @@ class LoginScreen extends StatelessWidget {
                     style: TextConstants.mainTextStyle(fontSize: 35),
                   ),
                   SizedBox(height: 20.0,),
-                  InputField(labelText: 'Email', onChanged: (value){}),
+                  InputField(labelText: 'Email', onChanged: (value){
+                    email = value;
+                  }),
                   SizedBox(height: 20.0,),
-                  InputField(labelText: 'Password', onChanged: (value){}),
+                  InputField(labelText: 'Password', onChanged: (value){
+                    password = value;
+                  }),
                   SizedBox(height: 20.0,),
-                  ActionButton(btnText: 'Login', onTap: (){
-                    //TODO:Edit
-                    Get.to(() => LoadingScreen());
+                  ActionButton(btnText: 'Login', onTap: () async {
+                    if(email == null)
+                      {
+                        Get.snackbar('Error', 'Please enter your email', snackPosition: SnackPosition.BOTTOM);
+                        return;
+                      }
+                    if(password == null)
+                      {
+                        Get.snackbar('Error', 'Please enter your password', snackPosition: SnackPosition.BOTTOM);
+                        return;
+                      }
+                    try{
+                      await AuthController.instance.login(email: email!, password: password!);
+                    }catch(e){
+                      print(e);
+                      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+                    }
                   }),
                 ],
               ),
