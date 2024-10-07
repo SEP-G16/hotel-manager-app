@@ -42,7 +42,11 @@ class Reservation {
       email: map['email'],
       adultCount: map['adultCount'],
       childrenCount: map['childrenCount'],
-      roomType: RoomType.values.byName(map['roomType']!['type']),  // Assuming roomType is an enum
+      roomType: RoomType.values.where((value) {
+        String lowercaseType = value.toString().split('.').last.toLowerCase();
+        String mapData = map['roomType']!['type'].toString().toLowerCase();
+        return lowercaseType == mapData;
+      }).toList().first,  // Assuming roomType is an enum
       roomCount: map['roomCount'],
       checkinDate: DateTime.parse(map['checkinDate']),
       checkoutDate: DateTime.parse(map['checkoutDate']),
