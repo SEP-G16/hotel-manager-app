@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:get/get.dart';
-import 'package:hotel_manager/views/loading_screen.dart';
-import 'package:hotel_manager/views/login_screen.dart';
+import 'package:hotel_manager/views/welcome_screen.dart';
+
+import 'controllers/data/auth_controller.dart';
+import 'controllers/data/secure_storage_controller.dart';
+import 'controllers/network/auth_network_controller.dart';
 
 
 // Initial comment
-void main() {
+void main() async {
+
+  Get.put(SecureStorageController());
+  Get.put(AuthNetworkController());
+
   runApp(const HotelManager());
+
+  await Get.putAsync(() => AuthController.create());
 }
 
 class HotelManager extends StatelessWidget {
@@ -22,7 +31,7 @@ class HotelManager extends StatelessWidget {
         colorScheme: ColorScheme.light(primary: ColourConstants.mainBlue),
         useMaterial3: true,
       ),
-      home: LoadingScreen(),
+      home: WelcomeScreen(),
     );
   }
 }
