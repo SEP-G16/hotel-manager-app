@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_manager/components/action_button.dart';
 import 'package:hotel_manager/components/booking_tile.dart';
+import 'package:hotel_manager/components/custom_drawer.dart';
 import 'package:hotel_manager/components/named_date_input_field.dart';
 import 'package:hotel_manager/components/named_drop_down_button.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/controllers/view/booking_tab_controller.dart';
+import 'package:hotel_manager/controllers/view/drawer_state_controller.dart';
+import 'package:hotel_manager/controllers/view/manage_reservartions_screen_state_controller.dart';
 import 'package:hotel_manager/controllers/view/manage_reservations_screen_tab_bar_controller.dart';
 import 'package:hotel_manager/enum/room_type.dart';
 import 'package:hotel_manager/models/booking.dart';
@@ -23,90 +26,19 @@ class ManageReservationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DrawerStateController.instance.selectedIndex = 1;
     Size deviceSize = MediaQuery.of(context).size;
     double deviceHeight = deviceSize.height;
     double deviceWidth = deviceSize.width;
+
+    Get.put(ManageReservationsScreenStateController());
 
     return GetBuilder<ManageReservationsScreenTabBarController>(
       init: ManageReservationsScreenTabBarController(),
       builder: (controller) => GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
-          drawer: SafeArea(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-              width: deviceWidth * 0.8,
-              color: ColourConstants.white,
-              child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Filters',
-                            style: TextConstants.mainTextStyle(),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: IconButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            icon: Icon(
-                              Icons.close_rounded,
-                              color: ColourConstants.mainBlue,
-                              size: 35,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  NamedDateInputField(
-                    titleText: 'Filter by Check In Date',
-                    onPressed: () {},
-                    titleTextStyle: TextConstants.mainTextStyle(fontSize: 20),
-                  ),
-                  NamedDateInputField(
-                    titleText: 'Filter by Checkout Date',
-                    onPressed: () {},
-                    titleTextStyle: TextConstants.mainTextStyle(fontSize: 20),
-                  ),
-                  NamedDropDownButton(
-                    titleText: 'Filter by Room Type',
-                    titleTextStyle: TextConstants.mainTextStyle(fontSize: 20),
-                    value: 'All',
-                    selectOptionValue: 'Select',
-                    onChanged: (value) {},
-                    itemList: [
-                          DropdownMenuItem(
-                            value: 'All',
-                            child: Text(
-                              'All',
-                              style: TextConstants.subTextStyle(),
-                            ),
-                          )
-                        ] +
-                        RoomType.values
-                            .map<DropdownMenuItem<String>>(
-                                (type) => DropdownMenuItem(
-                                      value: type.getRoomTypeAsString(),
-                                      child: Text(
-                                        type.getRoomTypeAsString(),
-                                        style: TextConstants.subTextStyle(),
-                                      ),
-                                    ))
-                            .toList(),
-                  )
-                ],
-              ),
-            ),
-          ),
+          drawer: CustomDrawer(),
           backgroundColor: ColourConstants.ivory,
           body: SafeArea(
             child: Column(
@@ -119,16 +51,18 @@ class ManageReservationsScreen extends StatelessWidget {
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.back();
-                          },
-                          child: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            color: ColourConstants.mainBlue,
-                            size: 30,
-                          ),
-                        ),
+                        child: Builder(builder: (context) {
+                          return GestureDetector(
+                            onTap: () {
+                              Scaffold.of(context).openDrawer();
+                            },
+                            child: Icon(
+                              Icons.menu_rounded,
+                              color: ColourConstants.richBlack,
+                              size: 30,
+                            ),
+                          );
+                        }),
                       ),
                       Align(
                         alignment: Alignment.center,
@@ -177,7 +111,7 @@ class ManageReservationsScreen extends StatelessWidget {
                                   color: controller.selectedIndex == 0
                                       ? ColourConstants.ivory
                                       : ColourConstants.richBlack,
-                                  fontSize: 16,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -210,7 +144,7 @@ class ManageReservationsScreen extends StatelessWidget {
                                   color: controller.selectedIndex == 1
                                       ? ColourConstants.ivory
                                       : ColourConstants.richBlack,
-                                  fontSize: 16,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -220,39 +154,20 @@ class ManageReservationsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 Expanded(
                   child: TabBarView(
                     controller: controller.tabController,
                     children: [
                       TempBookingTabBarView(
-                        reservations: BookingDataController.instance.tempBookingList,
+                        reservations: BookingDataController
+                            .instance.listenableReservationList,
                       ),
                       BookingsTabBarView(
-                        bookings: List.generate(
-                          5,
-                          (index) => Booking(
-                            id: index,
-                            customerName: 'Michael Clark',
-                            phoneNo: '0771234567',
-                            roomType: RoomType.Family,
-                            roomCount: 3,
-                            checkinDate:
-                                DateTime.now().add(Duration(days: index)),
-                            checkoutDate:
-                                DateTime.now().add(Duration(days: index * 2)),
-                            adultCount: 5,
-                            childrenCount: 3,
-                            email: 'michaelclark@example.com',
-                            totalAmount: 12000.0,
-                            rooms: List.generate(
-                              3,
-                              (rIndex) => Room(
-                                  id: index,
-                                  roomNo: '10${rIndex}',
-                                  roomType: RoomType.Family),
-                            ),
-                          ),
-                        ),
+                        bookings: BookingDataController
+                            .instance.listenableBookingList,
                       ),
                     ],
                   ),
