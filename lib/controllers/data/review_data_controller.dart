@@ -10,9 +10,6 @@ class ReviewDataController extends GetxController {
 
   static ReviewDataController instance = Get.find();
 
-  RxList<Review> _tempReviewList = <Review>[].obs;
-  List<Review> get tempReviewList => _tempReviewList;
-
   RxList<Review> _reviewList = <Review>[].obs;
   List<Review> get reviewList => _reviewList;
 
@@ -20,7 +17,7 @@ class ReviewDataController extends GetxController {
 
   static Future<ReviewDataController> create() async {
     final ReviewDataController controller = ReviewDataController._();
-    controller._initController();
+    await controller._initController();
     return controller;
   }
 
@@ -30,27 +27,14 @@ class ReviewDataController extends GetxController {
   }
 
   Future<void> _initController() async {
-    _tempReviewList.value = await _getTempReviews();
-    _reviewList.value = await _getAcceptedReviews();
+    _reviewList.assignAll(await _getReviews());
   }
 
-  Future<List<Review>> _getTempReviews() async {
+  Future<List<Review>> _getReviews() async {
     try {
-      List<Map<String, dynamic>> tempReviewsMapList =
-          await _rnc.getTempReviews();
-      return tempReviewsMapList.map((map) => Review.fromMap(map)).toList();
-    } on NetworkException catch (e) {
-      rethrow;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<List<Review>> _getAcceptedReviews() async {
-    try {
-      List<Map<String, dynamic>> acceptedReviewsMapList =
-          await _rnc.getAcceptedReviews();
-      return acceptedReviewsMapList.map((map) => Review.fromMap(map)).toList();
+      List<Map<String, dynamic>> reviewsMapList =
+          await _rnc.getReviews();
+      return reviewsMapList.map((map) => Review.fromMap(map)).toList();
     } on NetworkException catch (e) {
       rethrow;
     } catch (e) {
@@ -61,13 +45,13 @@ class ReviewDataController extends GetxController {
   Future<void> acceptReview({required int tempReviewId}) async {
     try {
       await _rnc.acceptReview(tempReviewId: tempReviewId);
-      Review review = _tempReviewList
+      Review review = _reviewList
           .where((tempReview) => tempReview.id == tempReviewId)
           .toList()
           .first;
-      _tempReviewList
+      _reviewList
           .removeWhere((tempReview) => tempReview.id == tempReviewId);
-      _reviewList.add(review.copyWith(status: ReviewStatus.Accepted));
+      _reviewList.add(review.copyWith(status: ReviewStatus.Approved));
       _reviewList.sort(
           (a, b) => a.createdAt.isBefore(b.createdAt) ? 1 : 0); //check sort
     } on NetworkException catch (e) {
@@ -80,7 +64,7 @@ class ReviewDataController extends GetxController {
   Future<void> rejectReview({required int tempReviewId}) async {
     try {
       await _rnc.rejectReview(tempReviewId: tempReviewId);
-      _tempReviewList
+      _reviewList
           .removeWhere((tempReview) => tempReview.id == tempReviewId);
     } on NetworkException catch (e) {
       rethrow;
