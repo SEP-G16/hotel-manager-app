@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hotel_manager/components/action_button.dart';
+import 'package:hotel_manager/components/custom_drawer.dart';
 import 'package:hotel_manager/components/review_tile.dart';
 import 'package:hotel_manager/components/staff_tile.dart';
 import 'package:hotel_manager/constants/svg_constants.dart';
+import 'package:hotel_manager/controllers/view/drawer_state_controller.dart';
 import 'package:hotel_manager/models/employee.dart';
 import 'package:hotel_manager/views/manage_staff/add_employee_screen.dart';
 import 'package:hotel_manager/views/manage_staff/view_employee_screen.dart';
@@ -17,7 +19,9 @@ class ManageStaffScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DrawerStateController.instance.selectedIndex = 5;
     return Scaffold(
+      drawer: CustomDrawer(),
       backgroundColor: ColourConstants.ivory,
       body: SafeArea(
         child: Column(
@@ -29,15 +33,19 @@ class ManageStaffScreen extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: ColourConstants.mainBlue,
-                        size: 30,
-                      ),
+                    child: Builder(
+                      builder: (context) {
+                        return GestureDetector(
+                          onTap: () {
+                            Scaffold.of(context).openDrawer();
+                          },
+                          child: Icon(
+                            Icons.menu_rounded,
+                            color: ColourConstants.richBlack,
+                            size: 30,
+                          ),
+                        );
+                      }
                     ),
                   ),
                   Align(
