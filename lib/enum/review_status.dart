@@ -1,4 +1,5 @@
 enum ReviewStatus{
   Pending,
-  Accepted
+  Approved,
+  Rejected
 }
