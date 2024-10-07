@@ -6,6 +6,7 @@ import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/constants/svg_constants.dart';
 import 'package:hotel_manager/constants/text_constants.dart';
 import 'package:get/get.dart';
+import 'package:hotel_manager/controllers/data/auth_controller.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -86,7 +87,9 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(height: 20.0,),
                 ActionButton(btnText: 'Change Password', onTap: (){}, width: 220,),
                 SizedBox(height: 20.0,),
-                ActionButton(btnText: 'Logout', onTap: (){}, width: 220,),
+                ActionButton(btnText: 'Logout', onTap: () async {
+                  await AuthController.instance.logout();
+                }, width: 220,),
                 SizedBox(height: 20.0,),
               ],
             ),
