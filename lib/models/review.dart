@@ -34,8 +34,8 @@ class Review {
       id: map['id'],
       name: map['name'],
       feedback: map['feedback'],
-      createdAt: DateTime.parse(map['createdAt'] ?? map['date']),
-      status: map['status'],
+      createdAt: DateTime.parse(map['createdAt']),
+      status: ReviewStatus.values.firstWhere((e) => e.toString().split('.').last == map['status']),
     );
   }
 
