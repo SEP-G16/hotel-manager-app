@@ -1,3 +1,5 @@
+import 'package:hotel_manager/models/reservation.dart';
+
 import '../enum/room_type.dart';
 import '../models/room.dart';
 
@@ -13,7 +15,7 @@ class Booking {
   final DateTime checkinDate;
   final DateTime checkoutDate;
   final List<Room> rooms;
-  final double totalAmount;
+  double totalAmount;
 
   Booking({
     required this.id,
@@ -27,7 +29,7 @@ class Booking {
     required this.childrenCount,
     required this.email,
     required this.rooms,
-    required this.totalAmount,
+    this.totalAmount = 0,
   });
 
   // Convert Booking object to Map
@@ -39,12 +41,13 @@ class Booking {
       'email': email,
       'adultCount': adultCount,
       'childrenCount': childrenCount,
-      'roomType': roomType.index,
+      'roomType': {
+        'id' : roomType.getTypeId(),
+      },
       'roomCount': roomCount,
-      'checkinDate': checkinDate.toIso8601String(),
-      'checkoutDate': checkoutDate.toIso8601String(),
-      'rooms': rooms.map((room) => room.toMap()).toList(),
-      'totalAmount': totalAmount,
+      'checkinDate': checkinDate.toIso8601String().split('T').first,
+      'checkoutDate': checkoutDate.toIso8601String().split('T').first,
+      'roomList': rooms.map((room) => room.toMap()).toList(),
     };
   }
 
@@ -57,12 +60,29 @@ class Booking {
       email: map['email'],
       adultCount: map['adultCount'],
       childrenCount: map['childrenCount'],
-      roomType: RoomType.values[map['roomType']],
+      roomType: RoomType.values.firstWhere((type) => type.getRoomTypeAsString() == map['roomType']!['type']!),
       roomCount: map['roomCount'],
       checkinDate: DateTime.parse(map['checkinDate']),
       checkoutDate: DateTime.parse(map['checkoutDate']),
-      rooms: List<Room>.from(map['rooms']?.map((x) => Room.fromMap(x))),
-      totalAmount: map['totalAmount'],
+      rooms: List<Room>.from(map['roomList']?.map((x) => Room.fromMap(x))),
+      totalAmount: map['roomCount']! * map['roomType']!['price']!,
+    );
+  }
+
+  factory Booking.fromReservation(Reservation reservation, List<Room> rooms) {
+    return Booking(
+      id: reservation.id,
+      customerName: reservation.customerName,
+      phoneNo: reservation.phoneNo,
+      email: reservation.email,
+      adultCount: reservation.adultCount,
+      childrenCount: reservation.childrenCount,
+      roomType: reservation.roomType,
+      roomCount: reservation.roomCount,
+      checkinDate: reservation.checkinDate,
+      checkoutDate: reservation.checkoutDate,
+      rooms: rooms,
+      totalAmount: 0,
     );
   }
 }
