@@ -162,8 +162,34 @@ class BookingNetworkController extends GetxController {
     return dataMap;
   }
 
-  Future<void> rejectReview({required int tempReviewId}) async {
-    //
+  Future<void> rejectBooking({required int tempBookingId}) async {
+    if (_authController.token == null) {
+      throw TokenNotFoundException('Token not found');
+    }
+
+    try {
+      var response = await http.delete(
+        Uri.parse('${NetworkConstants.baseUrl}/api/booking/temp/remove'),
+        headers: {
+          'Authorization': 'Bearer ${_authController.token!}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(tempBookingId),
+      );
+
+      if (response.statusCode == 401) {
+        await _authController.logout();
+        throw TokenExpiredException('Token expired');
+      }
+
+      if (!(response.statusCode >= 200 && response.statusCode < 300)) {
+        print(response.body);
+        throw NetworkException('Failed to reject booking');
+      }
+    } on FormatException catch (e) {
+      print(e);
+      rethrow;
+    }
   }
 
   Future<Map<String,dynamic>> addBooking({required Map<String, dynamic> map}) async {
