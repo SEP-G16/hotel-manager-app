@@ -6,10 +6,10 @@ import 'package:hotel_manager/components/named_drop_down_button.dart';
 import 'package:hotel_manager/components/named_input_field.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/constants/text_constants.dart';
-import 'package:hotel_manager/controllers/view/add_booking_view_state_controller.dart';
+import 'package:hotel_manager/controllers/view/reservation/add_booking_view_state_controller.dart';
 import 'package:hotel_manager/enum/room_type.dart';
 
-import '../../controllers/view/booking_tab_controller.dart';
+import '../../controllers/view/reservation/booking_tab_controller.dart';
 
 class AddBookingScreen extends StatelessWidget {
   AddBookingScreen({super.key});
