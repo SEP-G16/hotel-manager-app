@@ -10,6 +10,7 @@ import 'package:hotel_manager/controllers/view/drawer_state_controller.dart';
 import 'package:hotel_manager/views/dashboard_screen.dart';
 import 'package:hotel_manager/views/manage_reservations/manage_reservations_screen.dart';
 import 'package:hotel_manager/views/manage_staff/manage_staff_screen.dart';
+import 'package:hotel_manager/views/message_screen.dart';
 import 'package:hotel_manager/views/review_screen.dart';
 
 class DrawerTile extends StatelessWidget {
@@ -167,7 +168,7 @@ class CustomDrawer extends StatelessWidget {
                         : ColourConstants.richBlack,
                     onPressed: () {
                       DrawerStateController.instance.selectedIndex = 3;
-                      // Get.to(() => DashboardScreen());
+                      Get.to(() => MessageScreen());
                     },
                   );
                 }),
