@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hotel_manager/components/action_button.dart';
-import 'package:hotel_manager/components/booking_tile.dart';
 import 'package:hotel_manager/components/custom_drawer.dart';
-import 'package:hotel_manager/components/named_date_input_field.dart';
-import 'package:hotel_manager/components/named_drop_down_button.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
-import 'package:hotel_manager/controllers/view/booking_tab_controller.dart';
 import 'package:hotel_manager/controllers/view/drawer_state_controller.dart';
-import 'package:hotel_manager/controllers/view/manage_reservartions_screen_state_controller.dart';
-import 'package:hotel_manager/controllers/view/manage_reservations_screen_tab_bar_controller.dart';
-import 'package:hotel_manager/enum/room_type.dart';
-import 'package:hotel_manager/models/booking.dart';
-import 'package:hotel_manager/models/reservation.dart';
-import 'package:hotel_manager/models/room.dart';
+import 'package:hotel_manager/controllers/view/reservation/manage_reservartions_screen_state_controller.dart';
+import 'package:hotel_manager/controllers/view/reservation/manage_reservations_screen_tab_bar_controller.dart';
 import 'package:hotel_manager/views/manage_reservations/bookings_tab_bar_view.dart';
 import 'package:hotel_manager/views/manage_reservations/temp_booking_tab_bar_view.dart';
-import 'package:intl/intl.dart';
+
 
 import '../../constants/text_constants.dart';
 import '../../controllers/data/booking_data_controller.dart';
@@ -31,7 +22,8 @@ class ManageReservationsScreen extends StatelessWidget {
     double deviceHeight = deviceSize.height;
     double deviceWidth = deviceSize.width;
 
-    Get.put(ManageReservationsScreenStateController());
+    Get.put(BookingTabViewScreenStateController());
+    Get.put(TempBookingTabViewScreenStateController());
 
     return GetBuilder<ManageReservationsScreenTabBarController>(
       init: ManageReservationsScreenTabBarController(),

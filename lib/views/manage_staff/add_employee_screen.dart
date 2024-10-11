@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hotel_manager/components/action_button.dart';
 import 'package:hotel_manager/components/custom_drop_down_button.dart';
+import 'package:hotel_manager/components/loading_dialog.dart';
+import 'package:hotel_manager/components/message_dialog_box.dart';
 import 'package:hotel_manager/components/named_date_input_field.dart';
 import 'package:hotel_manager/components/named_drop_down_button.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
-import 'package:hotel_manager/controllers/view/add_employee_view_state_controller.dart';
+import 'package:hotel_manager/controllers/view/staff/add_employee_view_state_controller.dart';
+import 'package:hotel_manager/enum/gender.dart';
+import 'package:hotel_manager/views/manage_staff/manage_staff_screen.dart';
 import 'package:intl/intl.dart';
 
 import '../../components/named_input_field.dart';
@@ -109,16 +113,17 @@ class AddEmployeeScreen extends StatelessWidget {
                                 onChanged: (String? value) {
                                   controller.selectedRole = value;
                                 },
-                                itemList: List.generate(
-                                  10,
-                                  (index) => DropdownMenuItem<String>(
-                                    child: Text(
-                                      '$index',
-                                      style: TextConstants.subTextStyle(),
-                                    ),
-                                    value: index.toString(),
-                                  ),
-                                ),
+                                itemList: controller.roles
+                                    .map<DropdownMenuItem<String>>(
+                                      (role) => DropdownMenuItem(
+                                        value: role.name,
+                                        child: Text(
+                                          role.name,
+                                          style: TextConstants.subTextStyle(),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
                               ),
                             ),
 
@@ -130,12 +135,12 @@ class AddEmployeeScreen extends StatelessWidget {
                                 onChanged: (String? value) {
                                   controller.selectedGender = value!;
                                 },
-                                itemList: ['Male', 'Female']
+                                itemList: Gender.values
                                     .map<DropdownMenuItem<String>>(
                                       (gender) => DropdownMenuItem(
-                                        value: gender,
+                                        value: gender.name,
                                         child: Text(
-                                          gender,
+                                          gender.name,
                                           style: TextConstants.subTextStyle(),
                                         ),
                                       ),
@@ -181,45 +186,41 @@ class AddEmployeeScreen extends StatelessWidget {
                                   const EdgeInsets.symmetric(vertical: 10.0),
                               child: ActionButton(
                                 btnText: 'Add Employee',
-                                onTap: () {
+                                onTap: () async {
+
+                                  FocusManager.instance.primaryFocus?.unfocus();
+
                                   FormValidResponse response =
                                       controller.validateForm();
                                   if (!response.formValid) {
-                                    Get.dialog(
-                                      Dialog(
-                                        child: Container(
-                                          padding: EdgeInsets.all(10.0),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                response.message ??
-                                                    'Invalid Form',
-                                                style: TextConstants
-                                                    .subTextStyle(),
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              ActionButton(
-                                                outlineMode: true,
-                                                borderColour: ColourConstants
-                                                    .chineseBlack,
-                                                borderWidth: 2.0,
-                                                btnText: 'Go Back',
-                                                fontSize: 18,
-                                                height: 40,
-                                                onTap: () {
-                                                  Get.back();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                    MessageDialogBox(
+                                      message:
+                                          response.message ?? 'Invalid Form',
+                                      btnText: 'Go Back',
                                     );
                                   } else {
-                                    //TODO: controller.addEmployee();
+                                    LoadingDialog(
+                                        callerFunction: controller.addEmployee,
+                                        onSuccessCallBack: () {
+                                          Get.to(() => ManageStaffScreen());
+                                          Get.snackbar(
+                                            'Success',
+                                            'Employee added successfully',
+                                            backgroundColor:
+                                                ColourConstants.green1,
+                                            colorText: ColourConstants.white,
+                                          );
+                                        },
+                                        onErrorCallBack: (error) {
+                                          print(error.toString());
+                                          Get.snackbar(
+                                            'Error',
+                                            'An unexpected error occurred while adding employee',
+                                            backgroundColor:
+                                                ColourConstants.red1,
+                                            colorText: ColourConstants.white,
+                                          );
+                                        });
                                   }
                                 },
                                 width: 200,

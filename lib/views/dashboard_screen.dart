@@ -10,6 +10,7 @@ import 'package:hotel_manager/controllers/view/dashboard_state_controller.dart';
 import 'package:hotel_manager/controllers/view/drawer_state_controller.dart';
 import 'package:hotel_manager/views/manage_staff/manage_staff_screen.dart';
 import 'package:hotel_manager/views/manage_reservations/manage_reservations_screen.dart';
+import 'package:hotel_manager/views/message_screen.dart';
 import 'package:hotel_manager/views/profile_screen.dart';
 import 'package:hotel_manager/views/review_screen.dart';
 
@@ -18,7 +19,6 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DrawerStateController.instance.selectedIndex = 0;
     return Scaffold(
       drawer: CustomDrawer(),
       backgroundColor: ColourConstants.ivory,
@@ -182,6 +182,7 @@ class DashboardScreen extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: (){
                                       DrawerStateController.instance.selectedIndex = 3;
+                                      Get.to(() => MessageScreen());
                                     },
                                     child: Container(
                                       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),

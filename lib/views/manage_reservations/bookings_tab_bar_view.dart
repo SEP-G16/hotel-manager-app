@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_manager/components/action_button.dart';
-import 'package:hotel_manager/controllers/view/manage_reservartions_screen_state_controller.dart';
+import 'package:hotel_manager/controllers/view/reservation/manage_reservartions_screen_state_controller.dart';
 import 'package:hotel_manager/views/manage_reservations/add_booking_screen.dart';
 import 'package:hotel_manager/views/manage_reservations/view_booking_screen.dart';
 
@@ -25,21 +25,24 @@ class BookingsTabBarView extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10.0),
           child: Row(
             children: [
-              IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  icon: Icon(
-                    Icons.filter_list_rounded,
-                    size: 30,
-                  )),
-              SizedBox(
-                width: 10,
-              ),
+              // IconButton(
+              //     onPressed: () {
+              //       Scaffold.of(context).openDrawer();
+              //     },
+              //     icon: Icon(
+              //       Icons.filter_list_rounded,
+              //       size: 30,
+              //     )),
+              // SizedBox(
+              //   width: 10,
+              // ),
               Expanded(
                 child: SearchAnchor(builder: (context, controller) {
                   return SearchBar(
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      BookingTabViewScreenStateController.instance
+                          .handleSearchTextChange(value);
+                    },
                     leading: IconButton(
                       icon: Icon(
                         Icons.search_rounded,
@@ -73,7 +76,7 @@ class BookingsTabBarView extends StatelessWidget {
             child: Obx(
               () => Column(
                 children:
-                    ManageReservationsScreenStateController.instance.bookingList
+                    BookingTabViewScreenStateController.instance.displayedBookingList
                         .map<BookingTile>((booking) => BookingTile(
                             booking: booking,
                             onArrowTap: () {

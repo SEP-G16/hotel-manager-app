@@ -3,11 +3,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hotel_manager/components/action_button.dart';
 import 'package:hotel_manager/components/custom_drawer.dart';
+import 'package:hotel_manager/components/loading_dialog.dart';
 import 'package:hotel_manager/components/review_tile.dart';
 import 'package:hotel_manager/components/staff_tile.dart';
 import 'package:hotel_manager/constants/svg_constants.dart';
+import 'package:hotel_manager/controllers/data/staff_data_controller.dart';
 import 'package:hotel_manager/controllers/view/drawer_state_controller.dart';
+import 'package:hotel_manager/controllers/view/staff/manage_staff_screen_state_controller.dart';
+import 'package:hotel_manager/enum/gender.dart';
 import 'package:hotel_manager/models/employee.dart';
+import 'package:hotel_manager/models/role.dart';
 import 'package:hotel_manager/views/manage_staff/add_employee_screen.dart';
 import 'package:hotel_manager/views/manage_staff/view_employee_screen.dart';
 
@@ -19,7 +24,7 @@ class ManageStaffScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DrawerStateController.instance.selectedIndex = 5;
+    Get.put(ManageStaffScreenStateController());
     return Scaffold(
       drawer: CustomDrawer(),
       backgroundColor: ColourConstants.ivory,
@@ -33,20 +38,18 @@ class ManageStaffScreen extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Builder(
-                      builder: (context) {
-                        return GestureDetector(
-                          onTap: () {
-                            Scaffold.of(context).openDrawer();
-                          },
-                          child: Icon(
-                            Icons.menu_rounded,
-                            color: ColourConstants.richBlack,
-                            size: 30,
-                          ),
-                        );
-                      }
-                    ),
+                    child: Builder(builder: (context) {
+                      return GestureDetector(
+                        onTap: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                        child: Icon(
+                          Icons.menu_rounded,
+                          color: ColourConstants.richBlack,
+                          size: 30,
+                        ),
+                      );
+                    }),
                   ),
                   Align(
                     alignment: Alignment.center,
@@ -58,130 +61,165 @@ class ManageStaffScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              margin: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(30.0),
-                border: Border.all(color: ColourConstants.mainBlue, width: 3),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        label: Text(
-                          'Search Here',
-                          style: TextConstants.subTextStyle(
-                            fontSize: 18,
-                            color: ColourConstants.richBlack.withOpacity(
-                              0.7,
-                            ),
-                          ),
+            Row(
+              children: [
+                Expanded(
+                  child: SearchAnchor(builder: (context, controller) {
+                    return SearchBar(
+                      onChanged: (value) {
+                        ManageStaffScreenStateController.instance
+                            .handleSearchTextChange(value);
+                      },
+                      leading: IconButton(
+                        icon: Icon(
+                          Icons.search_rounded,
+                          color: ColourConstants.mainBlue,
                         ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                          vertical: 5.0,
-                        ),
-                        isDense: true,
-                        isCollapsed: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        floatingLabelStyle:
-                            TextStyle(color: Colors.transparent),
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        onPressed: () {},
                       ),
-                    ),
-                  ),
-                  Icon(
-                    Icons.search,
-                    size: 30,
-                    color: ColourConstants.mainBlue,
-                  ),
-                ],
-              ),
+                      hintText: 'Enter Name or Phone No.',
+                      hintStyle: WidgetStateTextStyle.resolveWith(
+                        (_) => TextConstants.subTextStyle(
+                          fontSize: 16,
+                          color: ColourConstants.chineseBlack.withOpacity(0.4),
+                        ),
+                      ),
+                      textStyle: WidgetStateTextStyle.resolveWith(
+                        (_) => TextConstants.subTextStyle(
+                          fontSize: 16,
+                          color: ColourConstants.chineseBlack,
+                        ),
+                      ),
+                    );
+                  }, suggestionsBuilder: (context, controller) {
+                    return [];
+                  }),
+                ),
+              ],
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(
-                    10,
-                    (_) => Employee(
-                      id: _,
-                      name: 'Emily Smith',
-                      role: 'Assistant Manager',
-                      gender: 'Female',
-                      dateOfBirth:
-                          DateTime.now().subtract(Duration(days: 365 * 20)),
-                      address: '16, Willow Street, Manchester, UK',
-                      phoneNo: '0776551234',
-                      email: 'emilys@example.com',
-                    ),
-                  )
-                      .map<Widget>(
-                        (employee) => StaffTile(
-                          name: employee.name,
-                          role: employee.role,
-                          phoneNo: employee.phoneNo,
-                          onInfoPressed: () {
-                            Get.to(
-                                () => ViewEmployeeScreen(employee: employee));
-                          },
-                          onFirePressed: () {
-                            Get.dialog(
-                              Dialog(
-                                child: Container(
-                                  padding: EdgeInsets.all(10.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'Are you sure you want to fire ${employee.name}?',
-                                        style: TextConstants.subTextStyle(),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      ActionButton(
-                                        outlineMode: true,
-                                        borderColour: ColourConstants.red1,
-                                        borderWidth: 2.0,
-                                        btnText: 'Fire Employee',
-                                        fontSize: 18,
-                                        onTap: () {
-                                          //TODO: employee remove functionality
-                                        },
-                                        height: 40,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      ActionButton(
-                                        outlineMode: true,
-                                        borderColour:
-                                            ColourConstants.chineseBlack,
-                                        borderWidth: 2.0,
-                                        btnText: 'Cancel',
-                                        fontSize: 18,
-                                        height: 40,
-                                        onTap: () {
-                                          Get.back();
-                                        },
-                                      ),
-                                    ],
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await StaffDataController.instance.reInitController();
+                },
+                child: Obx(
+                  () => CustomScrollView(
+                    slivers: ManageStaffScreenStateController
+                            .instance.displayedEmployeeList.isNotEmpty
+                        ? ManageStaffScreenStateController
+                            .instance.displayedEmployeeList
+                            .map((employee) {
+                            return SliverList(
+                              delegate: SliverChildListDelegate(
+                                [
+                                  StaffTile(
+                                    employee: employee,
+                                    onInfoPressed: () {
+                                      Get.to(() => ViewEmployeeScreen(
+                                          employee: employee));
+                                    },
+                                    onFirePressed: () {
+                                      Get.dialog(
+                                        Dialog(
+                                          child: Container(
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  'Are you sure you want to fire ${employee.name}?',
+                                                  style: TextConstants
+                                                      .subTextStyle(),
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                ActionButton(
+                                                  outlineMode: true,
+                                                  borderColour:
+                                                      ColourConstants.red1,
+                                                  borderWidth: 2.0,
+                                                  btnText: 'Fire Employee',
+                                                  fontSize: 18,
+                                                  onTap: () {
+                                                    Get.back(); //close dialog
+                                                    //TODO: employee remove functionality
+                                                    LoadingDialog(
+                                                      callerFunction: () async {
+                                                        await ManageStaffScreenStateController
+                                                            .instance
+                                                            .fireEmployee(
+                                                                employee.id);
+                                                      },
+                                                      onSuccessCallBack: () {
+                                                        Get.snackbar('Success',
+                                                            'Employee has been fired successfully',
+                                                            backgroundColor:
+                                                                ColourConstants
+                                                                    .green1,
+                                                            colorText:
+                                                                ColourConstants
+                                                                    .ivory);
+                                                      },
+                                                      onErrorCallBack: (error) {
+                                                        print(error.toString());
+                                                        Get.snackbar('Error',
+                                                            'An error occurred while firing the employee',
+                                                            backgroundColor:
+                                                                ColourConstants
+                                                                    .red1,
+                                                            colorText:
+                                                                ColourConstants
+                                                                    .ivory);
+                                                      },
+                                                    );
+                                                  },
+                                                  height: 40,
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                ActionButton(
+                                                  outlineMode: true,
+                                                  borderColour: ColourConstants
+                                                      .chineseBlack,
+                                                  borderWidth: 2.0,
+                                                  btnText: 'Cancel',
+                                                  fontSize: 18,
+                                                  height: 40,
+                                                  onTap: () {
+                                                    Get.back();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                ),
+                                ],
                               ),
                             );
-                          },
-                        ),
-                      )
-                      .toList(),
+                          }).toList()
+                        : <Widget>[
+                            SliverFillRemaining(
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Looks like no one has been added yet!',
+                                      textAlign: TextAlign.center,
+                                      style: TextConstants.mainTextStyle(
+                                          color: ColourConstants.richBlack),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                  ),
                 ),
               ),
             ),

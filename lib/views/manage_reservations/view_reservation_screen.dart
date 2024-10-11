@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hotel_manager/components/action_button.dart';
 import 'package:hotel_manager/components/loading_dialog.dart';
 import 'package:hotel_manager/components/room_tile.dart';
-import 'package:hotel_manager/controllers/view/view_reservation_state_controller.dart';
+import 'package:hotel_manager/controllers/view/reservation/view_reservation_state_controller.dart';
 import 'package:hotel_manager/enum/room_type.dart';
 import 'package:hotel_manager/models/reservation.dart';
 import 'package:hotel_manager/views/manage_reservations/assign_rooms_screen.dart';
+import 'package:hotel_manager/views/manage_reservations/manage_reservations_screen.dart';
 import 'package:intl/intl.dart';
 
 import '../../components/named_date_input_field.dart';
@@ -346,6 +347,17 @@ class ViewReservationScreen extends StatelessWidget {
                             borderColour: ColourConstants.green1,
                             borderWidth: 2.0,
                             onTap: () {
+                              if(ViewReservationStateController.instance.selectedRoomList.length < reservation.roomCount)
+                              {
+                                Get.snackbar(
+                                  'Room Count Mismatch',
+                                  'You have not selected the required number of rooms for this reservation.',
+                                  backgroundColor: ColourConstants.red1,
+                                  colorText: ColourConstants.ivory,
+                                );
+                                return;
+                              }
+
                               Get.dialog(
                                 Dialog(
                                   child: Container(
@@ -373,16 +385,7 @@ class ViewReservationScreen extends StatelessWidget {
                                               await ViewReservationStateController
                                                   .instance
                                                   .addBooking(
-                                                      reservation: reservation);
-                                              Get.back();
-                                              Get.snackbar(
-                                                'Reservation verified successfully',
-                                                'A room booking was successfully',
-                                                backgroundColor:
-                                                    ColourConstants.green1,
-                                                colorText:
-                                                    ColourConstants.ivory,
-                                              );
+                                                      reservation: reservation,);
                                             }, onErrorCallBack: (error) {
                                               print(error.toString());
                                               Get.snackbar(
@@ -394,6 +397,15 @@ class ViewReservationScreen extends StatelessWidget {
                                                     ColourConstants.ivory,
                                               );
                                             });
+                                            Get.back();
+                                            Get.snackbar(
+                                              'Reservation verified successfully',
+                                              'A room booking was successfully',
+                                              backgroundColor:
+                                              ColourConstants.green1,
+                                              colorText:
+                                              ColourConstants.ivory,
+                                            );
                                           },
                                           height: 40,
                                         ),
@@ -452,6 +464,33 @@ class ViewReservationScreen extends StatelessWidget {
                                       fontSize: 18,
                                       onTap: () {
                                         //TODO: reservation remove functionality
+                                        Get.back(); // close dialog
+                                        LoadingDialog(
+                                          callerFunction: () async {
+                                            await ViewReservationStateController
+                                                .instance
+                                                .cancelReservation(
+                                                    reservation: reservation);
+                                          },
+                                          onSuccessCallBack: () {
+                                            Get.to(() => ManageReservationsScreen());
+                                            Get.snackbar(
+                                              'Reservation Cancelled',
+                                              'The reservation was successfully cancelled.',
+                                              backgroundColor: ColourConstants.green1,
+                                              colorText: ColourConstants.ivory,
+                                            );
+                                          },
+                                          onErrorCallBack: (error) {
+                                            print(error.toString());
+                                            Get.snackbar(
+                                              'Error',
+                                              'An unexpected error occurred while cancelling the reservation.',
+                                              backgroundColor: ColourConstants.red1,
+                                              colorText: ColourConstants.ivory,
+                                            );
+                                          },
+                                        );
                                       },
                                       height: 40,
                                     ),

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_manager/components/reservation_tile.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/constants/text_constants.dart';
-import 'package:hotel_manager/controllers/view/manage_reservartions_screen_state_controller.dart';
-import 'package:hotel_manager/controllers/view/manage_reservations_screen_tab_bar_controller.dart';
+import 'package:hotel_manager/controllers/view/reservation/manage_reservartions_screen_state_controller.dart';
 import 'package:hotel_manager/views/manage_reservations/view_reservation_screen.dart';
 import '../../models/reservation.dart';
 import 'package:get/get.dart';
@@ -36,7 +35,10 @@ class TempBookingTabBarView extends StatelessWidget {
               Expanded(
                 child: SearchAnchor(builder: (context, controller) {
                   return SearchBar(
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      TempBookingTabViewScreenStateController.instance
+                          .handleSearchTextChange(value);
+                    },
                     leading: IconButton(
                       icon: Icon(
                         Icons.search_rounded,
@@ -72,8 +74,8 @@ class TempBookingTabBarView extends StatelessWidget {
           child: SingleChildScrollView(
             child: Obx(
               () => Column(
-                children: ManageReservationsScreenStateController
-                    .instance.reservationList
+                children: TempBookingTabViewScreenStateController
+                    .instance.displayedReservationList
                     .map<ReservationTile>((reservation) => ReservationTile(
                         reservation: reservation,
                         onTap: () {

@@ -82,7 +82,11 @@ class BookingDataController extends GetxController {
   }
 
   Future<void> rejectBooking({required int tempBookingId}) async {
-    try {} on NetworkException catch (e) {
+    try {
+      await _bnc.rejectBooking(tempBookingId: tempBookingId);
+      tempBookingList.removeWhere((tempBooking) => tempBooking.id == tempBookingId);
+      listenableReservationList.assignAll(tempBookingList);
+    } on NetworkException catch (e) {
       rethrow;
     } catch (e) {
       rethrow;

@@ -12,14 +12,13 @@ import 'package:hotel_manager/enum/review_status.dart';
 import 'package:hotel_manager/models/review.dart';
 
 import '../../constants/text_constants.dart';
-import '../controllers/view/review_screen_tab_bar_controller.dart';
+import '../controllers/view/review/review_screen_tab_bar_controller.dart';
 
 class ReviewScreen extends StatelessWidget {
   const ReviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    DrawerStateController.instance.selectedIndex = 2;
     Size deviceSize = MediaQuery.of(context).size;
     double deviceHeight = deviceSize.height;
     double deviceWidth = deviceSize.width;

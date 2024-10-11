@@ -50,4 +50,9 @@ class ViewReservationStateController extends GetxController{
     _selectedRoomList.clear();
     _roomList.clear();
   }
+
+  Future<void> cancelReservation({required Reservation reservation}) async {
+    await _bdc.rejectBooking(tempBookingId: reservation.id);
+    reinitController();
+  }
 }

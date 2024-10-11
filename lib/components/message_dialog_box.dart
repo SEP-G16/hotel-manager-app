@@ -7,9 +7,10 @@ import 'action_button.dart';
 
 class MessageDialogBox {
   final String message;
+  String? btnText;
   void Function()? onTap;
 
-  MessageDialogBox({required this.message, this.onTap}) {
+  MessageDialogBox({required this.message, this.onTap, this.btnText}) {
     _showDialog();
   }
 
@@ -33,7 +34,7 @@ class MessageDialogBox {
                 height: 20,
               ),
               ActionButton(
-                btnText: 'OK',
+                btnText: btnText ?? 'OK',
                 onTap: onTap ?? () {
                   Get.back();
                 },
