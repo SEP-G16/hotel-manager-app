@@ -11,6 +11,8 @@ class InputField extends StatelessWidget {
     this.width,
     this.initialValue,
     this.readOnly = false,
+    this.obscureText = false,
+    this.maxLines = 1,
   });
 
   double? width;
@@ -19,6 +21,8 @@ class InputField extends StatelessWidget {
   final Function(String? value) onChanged;
   bool readOnly;
   String? initialValue;
+  bool obscureText;
+  int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +43,14 @@ class InputField extends StatelessWidget {
         ],
       ),
       child: TextFormField(
-        maxLines: null,
+        obscureText: obscureText,
+        maxLines: maxLines,
         style: TextConstants.subTextStyle(),
         readOnly: readOnly,
         initialValue: initialValue,
         onChanged: onChanged,
         decoration: InputDecoration(
-          labelText: 'Type ${labelText}',
+          labelText: '${labelText}',
           labelStyle: TextConstants.subTextStyle(
             color: ColourConstants.chineseBlack.withOpacity(0.6),
           ),
