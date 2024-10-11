@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'booking_tab_controller.dart';
 
-class AddReservationViewStateController extends GetxController {
-  static AddReservationViewStateController get instance => Get.find();
+class AddBookingViewStateController extends GetxController {
+  static AddBookingViewStateController get instance => Get.find();
 
   // Properties
   RxString _selectedValue = '-1'.obs;
@@ -36,18 +36,18 @@ class AddReservationViewStateController extends GetxController {
   // Method to add the room directly to the confirmed list in BookingTabController
   void addRoomToConfirmedList() {
     // Create a Room object based on current state
-    Room room = Room(
-      number: 'Room Number : 16', // Example room number, update as needed
-      type: selectedCategory,
-      checkInDate: selectedDate,
-      checkOutDate: checkOutDate,
-      adults: int.parse(selectedAdultCount),
-      children: int.parse(selectedChildCount),
-      roomCount: int.parse(selectedValue),
-    );
+    // Room room = Room(
+    //   number: 'Room Number : 16', // Example room number, update as needed
+    //   type: selectedCategory,
+    //   checkInDate: selectedDate,
+    //   checkOutDate: checkOutDate,
+    //   adults: int.parse(selectedAdultCount),
+    //   children: int.parse(selectedChildCount),
+    //   roomCount: int.parse(selectedValue),
+    // );
 
     // Get the instance of BookingTabController and add the room
-    BookingTabController bookingTabController = Get.find();
-    bookingTabController.moveRoomToConfirmed(room);
+    // BookingTabController bookingTabController = Get.find();
+    // bookingTabController.moveReservationToConfirmed(room);
   }
 }

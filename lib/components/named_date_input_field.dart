@@ -10,6 +10,7 @@ class NamedDateInputField extends StatelessWidget {
     this.selectedDate,
     this.height,
     this.width,
+    this.titleTextStyle,
   });
 
   final String titleText;
@@ -17,17 +18,18 @@ class NamedDateInputField extends StatelessWidget {
   DateTime? selectedDate;
   double? height;
   double? width;
+  TextStyle? titleTextStyle;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             titleText,
-            style: TextConstants.mainTextStyle(fontSize: 25),
+            style: titleTextStyle ?? TextConstants.mainTextStyle(fontSize: 25),
           ),
           SizedBox(
             height: 5,

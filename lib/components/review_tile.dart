@@ -1,21 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hotel_manager/components/action_button.dart';
+import 'package:hotel_manager/enum/review_status.dart';
 import 'package:intl/intl.dart';
 
 import '../constants/colour_constants.dart';
 import '../constants/svg_constants.dart';
 import '../constants/text_constants.dart';
+import '../models/review.dart';
 
 class ReviewTile extends StatelessWidget {
-  const ReviewTile({
-    required this.customerName,
-    required this.reviewDate,
+  ReviewTile({
     required this.review,
-  });
+    this.onAcceptTap,
+    this.onAcceptErrorCallBack,
+    this.onRejectTap,
+    this.onRejectErrorCallBack,
+  }) {
+    assert(review.status == ReviewStatus.Pending
+        ? onAcceptTap != null && onRejectTap != null
+        : true);
+  }
 
-  final String customerName;
-  final DateTime reviewDate;
-  final String review;
+  final Review review;
+  FutureOr<void> Function()? onRejectTap;
+  FutureOr<void> Function(Object e)? onRejectErrorCallBack;
+  FutureOr<void> Function()? onAcceptTap;
+  FutureOr<void> Function(Object e)? onAcceptErrorCallBack;
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +62,11 @@ class ReviewTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      customerName,
+                      review.name,
                       style: TextConstants.subTextStyle(fontSize: 24),
                     ),
                     Text(
-                      DateFormat('yy/MM/dd').format(reviewDate),
+                      DateFormat('yy/MM/dd').format(review.createdAt),
                       style: TextConstants.subTextStyle(
                           fontSize: 18, fontWeight: FontWeight.w400),
                     ),
@@ -62,11 +75,63 @@ class ReviewTile extends StatelessWidget {
               ),
             ],
           ),
-          Text(
-            review,
-            overflow: TextOverflow.visible,
-            style: TextConstants.subTextStyle(
-                fontSize: 19, fontWeight: FontWeight.w400),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    review.feedback,
+                    overflow: TextOverflow.visible,
+                    style: TextConstants.subTextStyle(
+                        fontSize: 19, fontWeight: FontWeight.w400),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Visibility(
+            visible: review.status == ReviewStatus.Pending,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ActionButton(
+                  btnText: 'Reject',
+                  onTap: () async {
+                    try {
+                      await onRejectTap!();
+                    } catch (e) {
+                      if (onRejectErrorCallBack != null) {
+                        onRejectErrorCallBack!(e);
+                      }
+                    }
+                  },
+                  outlineMode: true,
+                  borderWidth: 2.0,
+                  borderColour: ColourConstants.red1,
+                  height: 50,
+                ),
+                ActionButton(
+                  btnText: 'Accept',
+                  onTap: () async {
+                    try {
+                      await onAcceptTap!();
+                    } catch (e) {
+                      if (onAcceptErrorCallBack != null) {
+                        onAcceptErrorCallBack!(e);
+                      }
+                    }
+                  },
+                  outlineMode: true,
+                  borderWidth: 2.0,
+                  borderColour: ColourConstants.green1,
+                  height: 50,
+                ),
+              ],
+            ),
           ),
         ],
       ),

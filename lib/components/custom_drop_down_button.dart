@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../constants/colour_constants.dart';
 import '../constants/text_constants.dart';
 
-class CustomDropDownButton extends StatelessWidget {
+class CustomDropDownButton<T> extends StatelessWidget {
   CustomDropDownButton({required this.value, this.itemList, required this.selectOptionValue, required this.onChanged,});
 
-  dynamic value;
-  dynamic selectOptionValue;
-  List<DropdownMenuItem<Object>>? itemList;
-  void Function(dynamic value)? onChanged;
+  T value;
+  T selectOptionValue;
+  List<DropdownMenuItem<T>>? itemList;
+  void Function(T? value)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,8 @@ class CustomDropDownButton extends StatelessWidget {
         style: TextConstants.subTextStyle(),
         underline: Container(),
         value: value,
-        items: [
-          DropdownMenuItem(
+        items: <DropdownMenuItem<T>>[
+          DropdownMenuItem<T>(
             value: selectOptionValue,
             child: Container(
               child: Text(

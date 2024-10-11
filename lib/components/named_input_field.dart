@@ -10,6 +10,8 @@ class NamedInputField extends StatelessWidget {
     this.height,
     this.width,
     this.readOnly = false,
+    this.initialValue,
+    this.titleTextStyle,
   });
 
   final String titleText;
@@ -19,6 +21,7 @@ class NamedInputField extends StatelessWidget {
   double? width;
   String? initialValue;
   bool readOnly;
+  TextStyle? titleTextStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class NamedInputField extends StatelessWidget {
         children: [
           Text(
             titleText,
-            style: TextConstants.mainTextStyle(fontSize: 25),
+            style: titleTextStyle ?? TextConstants.mainTextStyle(fontSize: 25),
           ),
           SizedBox(
             height: 5.0,
