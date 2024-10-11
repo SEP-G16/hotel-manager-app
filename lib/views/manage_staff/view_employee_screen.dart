@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hotel_manager/components/loading_dialog.dart';
+import 'package:hotel_manager/components/message_dialog_box.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
-import 'package:hotel_manager/controllers/view/view_employee_screen_state_controller.dart';
+import 'package:hotel_manager/controllers/view/staff/view_employee_screen_state_controller.dart';
+import 'package:hotel_manager/enum/gender.dart';
 import 'package:hotel_manager/models/employee.dart';
 import 'package:hotel_manager/models/form_valid_response.dart';
+import 'package:hotel_manager/views/manage_staff/manage_staff_screen.dart';
 import 'package:intl/intl.dart';
 
 import '../../components/action_button.dart';
@@ -21,6 +25,7 @@ class ViewEmployeeScreen extends StatelessWidget {
   ViewEmployeeScreen({required this.employee});
 
   final Employee employee;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -138,25 +143,28 @@ class ViewEmployeeScreen extends StatelessWidget {
                             return editMode
                                 ? NamedDropDownButton(
                                     titleText: 'Role',
-                                    value: 1,
-                                    selectOptionValue: 1,
+                                    value: controller.role,
+                                    selectOptionValue: '',
                                     onChanged: (value) {
-                              controller.role = value;
-                            },
-                                    itemList: List.generate(
-                                      10,
-                                      (index) => DropdownMenuItem(
-                                        child: Text(
-                                          '$index',
-                                          style: TextConstants.subTextStyle(),
-                                        ),
-                                      ),
-                                    ),
+                                      controller.role = value;
+                                    },
+                                    itemList: controller.roles
+                                        .map<DropdownMenuItem<String>>(
+                                          (role) => DropdownMenuItem(
+                                            value: role.name,
+                                            child: Text(
+                                              role.name,
+                                              style:
+                                                  TextConstants.subTextStyle(),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
                                   )
                                 : NamedInputField(
                                     titleText: 'Role',
-                                    onChanged: (value){},
-                                    initialValue: employee.role,
+                                    onChanged: (value) {},
+                                    initialValue: controller.role,
                                     readOnly: true,
                                   );
                           },
@@ -167,15 +175,17 @@ class ViewEmployeeScreen extends StatelessWidget {
                             if (controller.editMode) {
                               return NamedDropDownButton(
                                 titleText: 'Gender',
-                                value: '',
+                                value: controller.gender,
                                 selectOptionValue: '',
-                                onChanged: (value) {controller.gender = value;},
-                                itemList: ['Male', 'Female']
+                                onChanged: (value) {
+                                  controller.gender = value;
+                                },
+                                itemList: Gender.values
                                     .map<DropdownMenuItem<String>>(
                                       (gender) => DropdownMenuItem(
-                                        value: gender,
+                                        value: gender.name,
                                         child: Text(
-                                          gender,
+                                          gender.name,
                                           style: TextConstants.subTextStyle(),
                                         ),
                                       ),
@@ -186,7 +196,7 @@ class ViewEmployeeScreen extends StatelessWidget {
                               return NamedInputField(
                                 titleText: 'Gender',
                                 onChanged: (value) {},
-                                initialValue: employee.gender,
+                                initialValue: controller.gender,
                                 readOnly: true,
                               );
                             }
@@ -217,7 +227,7 @@ class ViewEmployeeScreen extends StatelessWidget {
                                 titleText: 'Date of Birth',
                                 onChanged: (value) {},
                                 initialValue: DateFormat('yyyy/MM/dd')
-                                    .format(employee.dateOfBirth),
+                                    .format(controller.dateOfBirth!),
                               );
                             }
                           },
@@ -238,7 +248,7 @@ class ViewEmployeeScreen extends StatelessWidget {
                             onChanged: (value) {
                               controller.phoneNo = value;
                             },
-                            initialValue: employee.phoneNo,
+                            initialValue: employee.phoneNumber,
                             readOnly: !controller.editMode,
                           ),
                         ),
@@ -261,45 +271,29 @@ class ViewEmployeeScreen extends StatelessWidget {
                               child: ActionButton(
                                 btnText: 'Save',
                                 onTap: () {
-                                  FormValidResponse response = controller.validateForm();
-                                  if(!response.formValid)
-                                    {
-                                      Get.dialog(
-                                        Dialog(
-                                          child: Container(
-                                            padding: EdgeInsets.all(10.0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  response.message ?? 'Invalid Form',
-                                                  style: TextConstants.subTextStyle(),
-                                                ),
-                                                SizedBox(
-                                                  height: 20,),
-                                                ActionButton(
-                                                  outlineMode: true,
-                                                  borderColour:
-                                                  ColourConstants.chineseBlack,
-                                                  borderWidth: 2.0,
-                                                  btnText: 'Go Back',
-                                                  fontSize: 18,
-                                                  height: 40,
-                                                  onTap: () {
-                                                    Get.back();
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  else
-                                    {
-                                      //TODO: controller.saveData();
-                                      controller.editMode = false;
-                                    }
+                                  FormValidResponse response =
+                                      controller.validateForm();
+                                  if (!response.formValid) {
+                                    MessageDialogBox(
+                                        message:
+                                            response.message ?? 'Invalid Form',
+                                        btnText: 'Go Back');
+                                  } else {
+                                    LoadingDialog(callerFunction: () async {
+                                      await controller.updateEmployee(
+                                          employeeId: employee.id);
+                                    }, onSuccessCallBack: () {
+                                      Get.to(() => ManageStaffScreen());
+                                      Get.snackbar('Success',
+                                          'Employee updated successfully', backgroundColor: ColourConstants.green1, colorText: ColourConstants.ivory);
+                                    }, onErrorCallBack: (error) {
+                                      Exception e = error as Exception;
+                                      Get.snackbar('Error',
+                                          'An unexpected error occurred while updating employee');
+                                      throw e;
+                                    });
+                                    controller.editMode = false;
+                                  }
                                 },
                               ),
                             ),
