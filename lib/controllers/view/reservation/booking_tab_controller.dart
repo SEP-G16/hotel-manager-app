@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_manager/enum/room_type.dart';
 import 'package:hotel_manager/models/Reservation.dart';
 
-import '../../models/booking.dart';
+import '../../../models/booking.dart';
 
 class BookingTabController extends GetxController with GetSingleTickerProviderStateMixin {
   late TabController tabController;
