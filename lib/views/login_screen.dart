@@ -14,7 +14,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     String? email;
     String? password;
 
@@ -32,39 +31,56 @@ class LoginScreen extends StatelessWidget {
                     SvgConstants.loginScreenImage,
                     height: 300,
                   ),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   Text(
                     'Login To Your\nAccount',
                     textAlign: TextAlign.center,
                     style: TextConstants.mainTextStyle(fontSize: 35),
                   ),
-                  SizedBox(height: 20.0,),
-                  InputField(labelText: 'Email', onChanged: (value){
-                    email = value;
-                  }),
-                  SizedBox(height: 20.0,),
-                  InputField(labelText: 'Password', onChanged: (value){
-                    password = value;
-                  }),
-                  SizedBox(height: 20.0,),
-                  ActionButton(btnText: 'Login', onTap: () async {
-                    if(email == null)
-                      {
-                        Get.snackbar('Error', 'Please enter your email', snackPosition: SnackPosition.BOTTOM);
-                        return;
-                      }
-                    if(password == null)
-                      {
-                        Get.snackbar('Error', 'Please enter your password', snackPosition: SnackPosition.BOTTOM);
-                        return;
-                      }
-                    try{
-                      await AuthController.instance.login(email: email!, password: password!);
-                    }catch(e){
-                      print(e);
-                      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
-                    }
-                  }),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  InputField(
+                      labelText: 'Username',
+                      onChanged: (value) {
+                        email = value;
+                      }),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  InputField(
+                      obscureText: true,
+                      labelText: 'Password',
+                      onChanged: (value) {
+                        password = value;
+                      }),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  ActionButton(
+                      btnText: 'Login',
+                      onTap: () async {
+                        if (email == null) {
+                          Get.snackbar('Error', 'Please enter your email',
+                              snackPosition: SnackPosition.BOTTOM);
+                          return;
+                        }
+                        if (password == null) {
+                          Get.snackbar('Error', 'Please enter your password',
+                              snackPosition: SnackPosition.BOTTOM);
+                          return;
+                        }
+                        try {
+                          await AuthController.instance
+                              .login(email: email!, password: password!);
+                        } catch (e) {
+                          print(e);
+                          Get.snackbar('Error', e.toString(),
+                              snackPosition: SnackPosition.BOTTOM);
+                        }
+                      }),
                 ],
               ),
             ),
