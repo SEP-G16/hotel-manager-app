@@ -5,7 +5,8 @@ import 'package:hotel_manager/components/named_input_field.dart';
 import 'package:hotel_manager/constants/colour_constants.dart';
 import 'package:hotel_manager/constants/svg_constants.dart';
 import 'package:hotel_manager/constants/text_constants.dart';
-
+import 'package:get/get.dart';
+import 'package:hotel_manager/controllers/data/auth_controller.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -27,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () => Get.back(),
                           child: Icon(
                             Icons.arrow_back_ios_new_rounded,
                             color: ColourConstants.mainBlue,
@@ -45,36 +46,36 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundColor: ColourConstants.mainBlue,
-                      child: CircleAvatar(
-                        radius: 75,
-                        child: SvgPicture.string(
-                          SvgConstants.avatarImage,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 10,
-                      child: GestureDetector(
-                        onTap: (){},
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: ColourConstants.mainBlue,
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Stack(
+                //   alignment: Alignment.center,
+                //   children: [
+                //     CircleAvatar(
+                //       radius: 80,
+                //       backgroundColor: ColourConstants.mainBlue,
+                //       child: CircleAvatar(
+                //         radius: 75,
+                //         child: SvgPicture.string(
+                //           SvgConstants.avatarImage,
+                //         ),
+                //       ),
+                //     ),
+                //     Positioned(
+                //       bottom: 0,
+                //       right: 10,
+                //       child: GestureDetector(
+                //         onTap: (){},
+                //         child: CircleAvatar(
+                //           radius: 20,
+                //           backgroundColor: ColourConstants.mainBlue,
+                //           child: Icon(
+                //             Icons.edit,
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 SizedBox(height: 20.0,),
                 NamedInputField(titleText: 'Name', onChanged: (value){}),
                 // SizedBox(height: 20.0,),
@@ -86,7 +87,9 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(height: 20.0,),
                 ActionButton(btnText: 'Change Password', onTap: (){}, width: 220,),
                 SizedBox(height: 20.0,),
-                ActionButton(btnText: 'Logout', onTap: (){}, width: 220,),
+                ActionButton(btnText: 'Logout', onTap: () async {
+                  await AuthController.instance.logout();
+                }, width: 220,),
                 SizedBox(height: 20.0,),
               ],
             ),
