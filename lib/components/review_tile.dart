@@ -61,9 +61,21 @@ class ReviewTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      review.name,
-                      style: TextConstants.subTextStyle(fontSize: 24),
+                    LimitedBox(
+                      maxWidth: MediaQuery.of(context).size.width * 0.7,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                review.name,
+                                style: TextConstants.subTextStyle(fontSize: 24),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Text(
                       DateFormat('yy/MM/dd').format(review.createdAt),
