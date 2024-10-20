@@ -101,7 +101,7 @@ class CustomDrawer extends StatelessWidget {
                 // ),
                 Obx(() {
                   bool isSelected =
-                      DrawerStateController.instance.selectedIndex == 0;
+                      DrawerStateController.instance.selectedIndex == DrawerStateController.DASHBAORD_INDEX;
                   return DrawerTile(
                     icon: Icons.dashboard_outlined,
                     colour: isSelected
@@ -111,7 +111,7 @@ class CustomDrawer extends StatelessWidget {
                         ? ColourConstants.white
                         : ColourConstants.richBlack,
                     onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 0;
+                      DrawerStateController.instance.selectedIndex = DrawerStateController.DASHBAORD_INDEX;
                       Scaffold.of(context).closeDrawer();
                       Get.to(() => DashboardScreen());
                     },
@@ -119,7 +119,7 @@ class CustomDrawer extends StatelessWidget {
                 }),
                 Obx(() {
                   bool isSelected =
-                      DrawerStateController.instance.selectedIndex == 1;
+                      DrawerStateController.instance.selectedIndex == DrawerStateController.BOOKINGS_INDEX;
                   return DrawerTile(
                     icon: Icons.bookmark_outline_outlined,
                     title: 'Bookings',
@@ -130,7 +130,7 @@ class CustomDrawer extends StatelessWidget {
                         ? ColourConstants.white
                         : ColourConstants.richBlack,
                     onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 1;
+                      DrawerStateController.instance.selectedIndex = DrawerStateController.BOOKINGS_INDEX;
                       Scaffold.of(context).closeDrawer();
                       Get.to(() => ManageReservationsScreen());
                     },
@@ -138,7 +138,7 @@ class CustomDrawer extends StatelessWidget {
                 }),
                 Obx(() {
                   bool isSelected =
-                      DrawerStateController.instance.selectedIndex == 2;
+                      DrawerStateController.instance.selectedIndex == DrawerStateController.REVIEWS_INDEX;
                   return DrawerTile(
                     icon: Icons.rate_review_outlined,
                     title: 'Reviews',
@@ -149,14 +149,14 @@ class CustomDrawer extends StatelessWidget {
                         ? ColourConstants.white
                         : ColourConstants.richBlack,
                     onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 2;
+                      DrawerStateController.instance.selectedIndex = DrawerStateController.REVIEWS_INDEX;
                       Get.to(() => ReviewScreen());
                     },
                   );
                 }),
                 Obx(() {
                   bool isSelected =
-                      DrawerStateController.instance.selectedIndex == 3;
+                      DrawerStateController.instance.selectedIndex == DrawerStateController.MESSAGES_INDEX;
                   return DrawerTile(
                     icon: Icons.message_outlined,
                     title: 'Messages',
@@ -167,14 +167,14 @@ class CustomDrawer extends StatelessWidget {
                         ? ColourConstants.white
                         : ColourConstants.richBlack,
                     onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 3;
+                      DrawerStateController.instance.selectedIndex = DrawerStateController.MESSAGES_INDEX;
                       Get.to(() => MessageScreen());
                     },
                   );
                 }),
                 Obx(() {
                   bool isSelected =
-                      DrawerStateController.instance.selectedIndex ==5;
+                      DrawerStateController.instance.selectedIndex == DrawerStateController.STAFF_INDEX;
                   return DrawerTile(
                     icon: Icons.people_outline_outlined,
                     title: 'Staff',
@@ -185,29 +185,29 @@ class CustomDrawer extends StatelessWidget {
                         ? ColourConstants.white
                         : ColourConstants.richBlack,
                     onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 5;
+                      DrawerStateController.instance.selectedIndex = DrawerStateController.STAFF_INDEX;
                       Get.to(() => ManageStaffScreen());
                     },
                   );
                 }),
-                Obx(() {
-                  bool isSelected =
-                      DrawerStateController.instance.selectedIndex == 4;
-                  return DrawerTile(
-                    icon: Icons.settings_outlined,
-                    title: 'Settings',
-                    colour: isSelected
-                        ? ColourConstants.mainBlue
-                        : Colors.grey.shade100,
-                    textColour: isSelected
-                        ? ColourConstants.white
-                        : ColourConstants.richBlack,
-                    onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 4;
-                      // Get.to(() => DashboardScreen());
-                    },
-                  );
-                }),
+                // Obx(() {
+                //   bool isSelected =
+                //       DrawerStateController.instance.selectedIndex == 4;
+                //   return DrawerTile(
+                //     icon: Icons.settings_outlined,
+                //     title: 'Settings',
+                //     colour: isSelected
+                //         ? ColourConstants.mainBlue
+                //         : Colors.grey.shade100,
+                //     textColour: isSelected
+                //         ? ColourConstants.white
+                //         : ColourConstants.richBlack,
+                //     onPressed: () {
+                //       DrawerStateController.instance.selectedIndex = 4;
+                //       // Get.to(() => DashboardScreen());
+                //     },
+                //   );
+                // }),
                 Spacer(),
                 ActionButton(
                     btnText: 'Logout',
