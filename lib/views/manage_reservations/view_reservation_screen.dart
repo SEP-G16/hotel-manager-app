@@ -40,7 +40,8 @@ class ViewReservationScreen extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
                       onTap: () {
-                        ViewReservationStateController.instance.reinitController();
+                        ViewReservationStateController.instance
+                            .reinitController();
                         Get.back();
                       },
                       child: Icon(
@@ -178,9 +179,11 @@ class ViewReservationScreen extends StatelessWidget {
                       child: FutureBuilder(
                         future: ViewReservationStateController.instance
                             .getAvailabilityStatus(
-                                from: reservation.checkinDate,
-                                to: reservation.checkoutDate,
-                                roomType: reservation.roomType),
+                          from: reservation.checkinDate,
+                          to: reservation.checkoutDate,
+                          roomType: reservation.roomType,
+                          expectedCount: reservation.roomCount,
+                        ),
                         builder: (context, snapshot) {
                           String data = '';
                           if (snapshot.hasData) {
@@ -347,8 +350,9 @@ class ViewReservationScreen extends StatelessWidget {
                             borderColour: ColourConstants.green1,
                             borderWidth: 2.0,
                             onTap: () {
-                              if(ViewReservationStateController.instance.selectedRoomList.length < reservation.roomCount)
-                              {
+                              if (ViewReservationStateController
+                                      .instance.selectedRoomList.length <
+                                  reservation.roomCount) {
                                 Get.snackbar(
                                   'Room Count Mismatch',
                                   'You have not selected the required number of rooms for this reservation.',
@@ -385,7 +389,8 @@ class ViewReservationScreen extends StatelessWidget {
                                               await ViewReservationStateController
                                                   .instance
                                                   .addBooking(
-                                                      reservation: reservation,);
+                                                reservation: reservation,
+                                              );
                                             }, onErrorCallBack: (error) {
                                               print(error.toString());
                                               Get.snackbar(
@@ -402,9 +407,8 @@ class ViewReservationScreen extends StatelessWidget {
                                               'Reservation verified successfully',
                                               'A room booking was successfully',
                                               backgroundColor:
-                                              ColourConstants.green1,
-                                              colorText:
-                                              ColourConstants.ivory,
+                                                  ColourConstants.green1,
+                                              colorText: ColourConstants.ivory,
                                             );
                                           },
                                           height: 40,
@@ -473,11 +477,13 @@ class ViewReservationScreen extends StatelessWidget {
                                                     reservation: reservation);
                                           },
                                           onSuccessCallBack: () {
-                                            Get.to(() => ManageReservationsScreen());
+                                            Get.to(() =>
+                                                ManageReservationsScreen());
                                             Get.snackbar(
                                               'Reservation Cancelled',
                                               'The reservation was successfully cancelled.',
-                                              backgroundColor: ColourConstants.green1,
+                                              backgroundColor:
+                                                  ColourConstants.green1,
                                               colorText: ColourConstants.ivory,
                                             );
                                           },
@@ -486,7 +492,8 @@ class ViewReservationScreen extends StatelessWidget {
                                             Get.snackbar(
                                               'Error',
                                               'An unexpected error occurred while cancelling the reservation.',
-                                              backgroundColor: ColourConstants.red1,
+                                              backgroundColor:
+                                                  ColourConstants.red1,
                                               colorText: ColourConstants.ivory,
                                             );
                                           },
