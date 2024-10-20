@@ -19,6 +19,12 @@ class ReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.REVIEWS_INDEX;
+    });
+
+
     Size deviceSize = MediaQuery.of(context).size;
     double deviceHeight = deviceSize.height;
     double deviceWidth = deviceSize.width;

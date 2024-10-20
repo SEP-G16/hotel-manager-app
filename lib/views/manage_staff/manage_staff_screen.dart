@@ -24,6 +24,11 @@ class ManageStaffScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.STAFF_INDEX;
+    });
+
     Get.put(ManageStaffScreenStateController());
     return Scaffold(
       drawer: CustomDrawer(),

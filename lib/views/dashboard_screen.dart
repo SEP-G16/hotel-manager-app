@@ -19,6 +19,11 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.DASHBAORD_INDEX;
+    });
+
     return Scaffold(
       drawer: CustomDrawer(),
       backgroundColor: ColourConstants.ivory,

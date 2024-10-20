@@ -27,6 +27,12 @@ class MessageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.MESSAGES_INDEX;
+    });
+
+
     Get.put(MessageScreenStateController());
     Size deviceSize = MediaQuery.of(context).size;
     double deviceHeight = deviceSize.height;
@@ -76,90 +82,58 @@ class MessageScreen extends StatelessWidget {
                     await MessageScreenStateController.instance
                         .getSupportTickets();
                   },
-                  // child: SingleChildScrollView(
-                  //   child: Obx(
-                  //     () => Column(
-                  //       children: MessageScreenStateController
-                  //               .instance.ticketList.isEmpty
-                  //           ? List.generate(
-                  //               10,
-                  //               (_) => Container(
-                  //                     padding: EdgeInsets.symmetric(
-                  //                         horizontal: 10.0, vertical: 10.0),
-                  //                     alignment: Alignment.center,
-                  //                     height: 150,
-                  //                     width: double.maxFinite,
-                  //                     child: Text(
-                  //                       _ == 2
-                  //                           ? 'Nothing to see here! Drag Down to Refresh'
-                  //                           : '',
-                  //                       textAlign: TextAlign.center,
-                  //                       style: TextConstants.mainTextStyle(),
-                  //                     ),
-                  //                   ))
-                  //           : MessageScreenStateController.instance.ticketList
-                  //               .map(
-                  //               (ticket) {
-                  //                 final controller = Get.put(
-                  //                     MessageStateController(),
-                  //                     tag: ticket.id.toString());
-                  //                 return MessageTile(
-                  //                   ticket: ticket,
-                  //                   onChanged: (value) {
-                  //                     controller.message = value;
-                  //                   },
-                  //                   onSendTap: () async {
-                  //                     await controller.sendMessage(ticket.id);
-                  //                   },
-                  //                 );
-                  //               },
-                  //             ).toList(),
-                  //     ),
-                  //   ),
-                  // ),
                   child: Obx(
                     () => CustomScrollView(
-                      slivers: MessageScreenStateController.instance.ticketList.isNotEmpty ? MessageScreenStateController.instance.ticketList.map((ticket) {
-                        final controller = Get.put(MessageStateController(), tag: ticket.id.toString());
-                        return SliverList(
-                          delegate: SliverChildListDelegate(
-                            [
-                              MessageTile(
-                                ticket: ticket,
-                                onChanged: (value) {
-                                  controller.message = value;
-                                },
-                                onSendTap: () async {
-                                  if(controller.message == null || controller.message!.isEmpty){
-                                    MessageDialogBox(message: 'You cannot send an empty message');
-                                    return;
-                                  }
-                                  await controller.sendMessage(ticket.id);
-                                },
+                      slivers: MessageScreenStateController
+                              .instance.ticketList.isNotEmpty
+                          ? MessageScreenStateController.instance.ticketList
+                              .map((ticket) {
+                              final controller = Get.put(
+                                  MessageStateController(),
+                                  tag: ticket.id.toString());
+                              return SliverList(
+                                delegate: SliverChildListDelegate(
+                                  [
+                                    MessageTile(
+                                      ticket: ticket,
+                                      onChanged: (value) {
+                                        controller.message = value;
+                                      },
+                                      onSendTap: () async {
+                                        if (controller.message == null ||
+                                            controller.message!.isEmpty) {
+                                          MessageDialogBox(
+                                              message:
+                                                  'You cannot send an empty message');
+                                          return;
+                                        }
+                                        await controller.sendMessage(ticket.id);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList()
+                          : <Widget>[
+                              SliverFillRemaining(
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Nothing to see here! Drag Down to Refresh!',
+                                        textAlign: TextAlign.center,
+                                        style: TextConstants.mainTextStyle(
+                                            color: ColourConstants.richBlack),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
-                          ),
-                        );
-                      }).toList() : <Widget>[
-                        SliverFillRemaining(
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Nothing to see here! Drag Down to Refresh!',
-                                  textAlign: TextAlign.center,
-                                  style: TextConstants.mainTextStyle(color: ColourConstants.richBlack),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ),
-
               ),
             ],
           ),

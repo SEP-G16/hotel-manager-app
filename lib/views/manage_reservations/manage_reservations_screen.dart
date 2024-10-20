@@ -17,7 +17,12 @@ class ManageReservationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DrawerStateController.instance.selectedIndex = 1;
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.BOOKINGS_INDEX;
+    });
+
+
     Size deviceSize = MediaQuery.of(context).size;
     double deviceHeight = deviceSize.height;
     double deviceWidth = deviceSize.width;
