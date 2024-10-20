@@ -72,17 +72,47 @@ class BookingsTabBarView extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await BookingTabViewScreenStateController.instance.reInitController();
+            },
             child: Obx(
-              () => Column(
-                children:
-                    BookingTabViewScreenStateController.instance.displayedBookingList
-                        .map<BookingTile>((booking) => BookingTile(
-                            booking: booking,
-                            onArrowTap: () {
-                              Get.to(() => ViewBookingScreen(booking: booking));
-                            }))
-                        .toList(),
+                  () => CustomScrollView(
+                slivers: BookingTabViewScreenStateController
+                    .instance.displayedBookingList.isNotEmpty
+                    ? BookingTabViewScreenStateController
+                    .instance.displayedBookingList
+                    .map((booking) {
+                  return SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        BookingTile(
+                          booking: booking,
+                          onArrowTap: () {
+                            Get.to(() => ViewBookingScreen(booking: booking));
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList()
+                    : <Widget>[
+                  SliverFillRemaining(
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Looks like no one has been added yet!',
+                            textAlign: TextAlign.center,
+                            style: TextConstants.mainTextStyle(
+                                color: ColourConstants.richBlack),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

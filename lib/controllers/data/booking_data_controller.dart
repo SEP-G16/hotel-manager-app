@@ -94,13 +94,16 @@ class BookingDataController extends GetxController {
   }
 
   Future<String> getAvailabilityStatus(
-      DateTime from, DateTime to, RoomType roomType) async {
+      DateTime from, DateTime to, RoomType roomType, {int? expectedCount}) async {
     try {
       List<Map<String, dynamic>> availabilityMapList =
           await _bnc.getAvailableRoomCount(from: from, to: to);
       Map<String, dynamic> availabilityMap = availabilityMapList
           .firstWhere((map) => map['type']! == roomType.getRoomTypeAsString());
-      return availabilityMap['roomCount']! != 0 ? 'Available' : 'Unavailable';
+
+      int availableCount = (availabilityMap['roomCount']! as int);
+
+      return availableCount != 0 &&  availableCount >= (expectedCount ?? 0)? 'Available' : 'Unavailable';
     } on NetworkException catch (e) {
       rethrow;
     } catch (e) {
@@ -149,5 +152,15 @@ class BookingDataController extends GetxController {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> cancelBooking({required int bookingId}) async {
+    await _bnc.cancelBooking(bookingId: bookingId);
+    _bookingList.removeWhere((booking) => booking.id == bookingId);
+    listenableBookingList.assignAll(_bookingList);
+  }
+
+  Future<void> addBookingByBooking({required Booking booking}) async {
+    await _bnc.addBooking(map: booking.toMap());
   }
 }
