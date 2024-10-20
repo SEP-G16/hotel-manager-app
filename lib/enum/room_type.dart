@@ -1,5 +1,10 @@
 enum RoomType{
-  Standard, Deluxe, Suite
+  Standard, Deluxe, Suite;
+
+  static RoomType fromString(String value)
+  {
+    return RoomType.values.firstWhere((element) => element.toString().split('.').last == value);
+  }
 }
 
 extension RoomTypeExtension on RoomType{
