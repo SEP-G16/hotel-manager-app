@@ -20,8 +20,8 @@ class ViewReservationStateController extends GetxController{
   List<Room> get selectedRoomList => _selectedRoomList;
 
 
-  Future<String> getAvailabilityStatus({required DateTime from, required DateTime to, required RoomType roomType}) async {
-    _availability.value =  await _bdc.getAvailabilityStatus(from, to, roomType);
+  Future<String> getAvailabilityStatus({required DateTime from, required DateTime to, required RoomType roomType, int? expectedCount}) async {
+    _availability.value =  await _bdc.getAvailabilityStatus(from, to, roomType, expectedCount: expectedCount);
     return _availability.value;
   }
 
