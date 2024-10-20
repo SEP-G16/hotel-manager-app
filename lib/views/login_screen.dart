@@ -43,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                     height: 20.0,
                   ),
                   InputField(
-                      labelText: 'Username',
+                      labelText: 'Email',
                       onChanged: (value) {
                         email = value;
                       }),
@@ -60,27 +60,28 @@ class LoginScreen extends StatelessWidget {
                     height: 20.0,
                   ),
                   ActionButton(
-                      btnText: 'Login',
-                      onTap: () async {
-                        if (email == null) {
-                          Get.snackbar('Error', 'Please enter your email',
-                              snackPosition: SnackPosition.BOTTOM);
-                          return;
-                        }
-                        if (password == null) {
-                          Get.snackbar('Error', 'Please enter your password',
-                              snackPosition: SnackPosition.BOTTOM);
-                          return;
-                        }
-                        try {
-                          await AuthController.instance
-                              .login(email: email!, password: password!);
-                        } catch (e) {
-                          print(e);
-                          Get.snackbar('Error', e.toString(),
-                              snackPosition: SnackPosition.BOTTOM);
-                        }
-                      }),
+                    btnText: 'Login',
+                    onTap: () async {
+                      if (email == null) {
+                        Get.snackbar('Error', 'Please enter your email',
+                            snackPosition: SnackPosition.BOTTOM);
+                        return;
+                      }
+                      if (password == null) {
+                        Get.snackbar('Error', 'Please enter your password',
+                            snackPosition: SnackPosition.BOTTOM);
+                        return;
+                      }
+                      try {
+                        await AuthController.instance
+                            .login(email: email!, password: password!);
+                      } catch (e) {
+                        print(e);
+                        Get.snackbar('Error', e.toString(),
+                            snackPosition: SnackPosition.BOTTOM);
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
