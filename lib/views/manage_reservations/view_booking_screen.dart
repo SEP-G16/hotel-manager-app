@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_manager/components/loading_dialog.dart';
+import 'package:hotel_manager/components/room_tile.dart';
+import 'package:hotel_manager/controllers/data/booking_data_controller.dart';
 import 'package:hotel_manager/enum/room_type.dart';
+import 'package:hotel_manager/views/manage_reservations/manage_reservations_screen.dart';
 import 'package:intl/intl.dart';
 
 import '../../components/action_button.dart';
@@ -162,7 +166,9 @@ class ViewBookingScreen extends StatelessWidget {
                         onChanged: (value) {},
                       ),
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                       child: Column(
@@ -171,34 +177,34 @@ class ViewBookingScreen extends StatelessWidget {
                             children: [
                               Text(
                                 'Assigned Rooms',
-                                style: TextConstants.mainTextStyle(fontSize: 25),
+                                style:
+                                    TextConstants.mainTextStyle(fontSize: 25),
                               ),
                             ],
                           ),
-                          Column(
-                            children: booking.rooms.map<Widget>((room) {
-                              return Container(
-                                width: double.maxFinite,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: ColourConstants.mainBlue, width: 2.0),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 1,
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 3), // changes position of shadow
-                                    ),
-                                  ],
-                                  color: ColourConstants.white
+                          CustomScrollView(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            primary: false,
+                            slivers: [
+                              SliverPadding(
+                                padding: EdgeInsets.all(5),
+                                sliver: SliverGrid.count(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 5,
+                                  children: booking.rooms
+                                      .map(
+                                        (room) => RoomTile(
+                                          roomId: room.id,
+                                          roomNo: room.roomNo,
+                                        ),
+                                      )
+                                      .toList(),
+                                  childAspectRatio: 2,
                                 ),
-                                padding: EdgeInsets.all(10.0),
-                                margin: EdgeInsets.symmetric(
-                                  vertical: 5,
-                                ),
-                                child: Text('Room - ${room.roomNo}', style: TextConstants.subTextStyle(),),
-                              );
-                            }).toList(),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -219,7 +225,7 @@ class ViewBookingScreen extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      'Are you sure you want to cancel this booking?',
+                                      'Are you sure you want to cancel this reservation?',
                                       style: TextConstants.subTextStyle(),
                                     ),
                                     SizedBox(
@@ -232,7 +238,31 @@ class ViewBookingScreen extends StatelessWidget {
                                       btnText: 'Yes',
                                       fontSize: 18,
                                       onTap: () {
-                                        //TODO: booking remove functionality
+                                        //TODO: reservation remove functionality
+                                        Get.back(); // close dialog
+                                        LoadingDialog(
+                                          callerFunction: () async {
+                                            await BookingDataController.instance.cancelBooking(bookingId: booking.id);
+                                          },
+                                          onSuccessCallBack: () {
+                                            Get.to(() => ManageReservationsScreen());
+                                            Get.snackbar(
+                                              'Reservation Cancelled',
+                                              'The booking was successfully cancelled.',
+                                              backgroundColor: ColourConstants.green1,
+                                              colorText: ColourConstants.ivory,
+                                            );
+                                          },
+                                          onErrorCallBack: (error) {
+                                            print(error.toString());
+                                            Get.snackbar(
+                                              'Error',
+                                              'An unexpected error occurred while cancelling the reservation.',
+                                              backgroundColor: ColourConstants.red1,
+                                              colorText: ColourConstants.ivory,
+                                            );
+                                          },
+                                        );
                                       },
                                       height: 40,
                                     ),
