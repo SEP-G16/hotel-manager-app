@@ -44,10 +44,12 @@ class LoadingScreen extends StatelessWidget {
                   return Scaffold(
                     body: SafeArea(
                       child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         alignment: Alignment.center,
                         child: Text(
                           'You are unauthorized to access this app!\nYou\'ll be redirected to the Login Page',
                           style: TextConstants.mainTextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),

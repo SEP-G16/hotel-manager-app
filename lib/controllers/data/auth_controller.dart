@@ -79,6 +79,7 @@ class AuthController extends GetxController {
       String token = await _anc.login(email: email, password: password);
       await _ssc.writeSecureData(key: 'token', value: token);
       _token.value = token;
+      await _fetchRole();
     } on RequestUnauthorizedException catch (e) {
       print(e);
       rethrow;
