@@ -13,6 +13,7 @@ class InputField extends StatelessWidget {
     this.readOnly = false,
     this.obscureText = false,
     this.maxLines = 1,
+    this.keyboardType,
   });
 
   double? width;
@@ -23,6 +24,7 @@ class InputField extends StatelessWidget {
   String? initialValue;
   bool obscureText;
   int? maxLines;
+  TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class InputField extends StatelessWidget {
         ],
       ),
       child: TextFormField(
+        keyboardType: keyboardType,
         obscureText: obscureText,
         maxLines: maxLines,
         style: TextConstants.subTextStyle(),
