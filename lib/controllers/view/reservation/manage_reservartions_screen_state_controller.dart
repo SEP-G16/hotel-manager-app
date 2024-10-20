@@ -43,6 +43,10 @@ class BookingTabViewScreenStateController extends GetxController {
       _displayedBookingList.assignAll(value);
     });
   }
+
+  Future<void> reInitController() async {
+    await _bdc.reinitController();
+  }
 }
 
 class TempBookingTabViewScreenStateController extends GetxController {
