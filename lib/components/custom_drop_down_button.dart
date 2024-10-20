@@ -4,10 +4,11 @@ import '../constants/colour_constants.dart';
 import '../constants/text_constants.dart';
 
 class CustomDropDownButton<T> extends StatelessWidget {
-  CustomDropDownButton({required this.value, this.itemList, required this.selectOptionValue, required this.onChanged,});
+  CustomDropDownButton({required this.value, this.itemList, required this.selectOptionValue, required this.onChanged, this.includeSelectOption = true});
 
   T value;
   T selectOptionValue;
+  bool includeSelectOption;
   List<DropdownMenuItem<T>>? itemList;
   void Function(T? value)? onChanged;
 
@@ -31,7 +32,7 @@ class CustomDropDownButton<T> extends StatelessWidget {
         style: TextConstants.subTextStyle(),
         underline: Container(),
         value: value,
-        items: <DropdownMenuItem<T>>[
+        items: (includeSelectOption ? <DropdownMenuItem<T>>[
           DropdownMenuItem<T>(
             value: selectOptionValue,
             child: Container(
@@ -41,7 +42,7 @@ class CustomDropDownButton<T> extends StatelessWidget {
               ),
             ),
           ),
-        ] +
+        ] : <DropdownMenuItem<T>>[]) +
             (itemList ?? []),
         onChanged: onChanged,
         isExpanded : true,

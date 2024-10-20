@@ -12,6 +12,7 @@ class NamedDropDownButton<T> extends StatelessWidget {
     this.itemList,
     this.width,
     this.titleTextStyle,
+    this.includeSelectOption = true
   });
 
   final String titleText;
@@ -21,6 +22,7 @@ class NamedDropDownButton<T> extends StatelessWidget {
   List<DropdownMenuItem<T>>? itemList;
   double? width;
   TextStyle? titleTextStyle;
+  bool includeSelectOption;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class NamedDropDownButton<T> extends StatelessWidget {
             height: 5.0,
           ),
           CustomDropDownButton<T>(
+            includeSelectOption: includeSelectOption,
             value: value,
             selectOptionValue: selectOptionValue,
             onChanged: onChanged,
