@@ -9,6 +9,8 @@ import 'package:hotel_manager/exception/unauthorized_exception.dart';
 import 'package:hotel_manager/views/loading_screen.dart';
 import 'package:hotel_manager/views/login_screen.dart';
 
+import '../../enum/role.dart';
+
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
 
@@ -17,6 +19,8 @@ class AuthController extends GetxController {
   final AuthNetworkController _anc = AuthNetworkController.instance;
 
   late final Rx<String?> _token;
+
+  Rx<Role?> role = null.obs;
 
   String? get token => _token.value;
 
@@ -32,7 +36,7 @@ class AuthController extends GetxController {
     try {
       await Future.delayed(Duration(seconds: 3));
       await _getTokenFromSecureStorage();
-      await _validateToken();
+      await _fetchRole();
 
       Get.offAll(
         () => LoadingScreen(),
@@ -65,8 +69,9 @@ class AuthController extends GetxController {
     _token.value = token;
   }
 
-  Future<void> _validateToken() async {
-    await _anc.validateToken(token: _token.value!);
+  Future<void> _fetchRole() async {
+    Map<String, dynamic> data = await _anc.fetchRole(token: _token.value!);
+    role = Rx<Role?>(Role.fromString(data['roles'].first.toString()));
   }
 
   Future<void> login({required String email, required String password}) async {
@@ -89,6 +94,13 @@ class AuthController extends GetxController {
   Future<void> logout() async {
     await _ssc.deleteSecureData(key: 'token');
     _token.value = null;
+  }
+
+  bool hasRole(List<Role> list) {
+    if (role.value == null) {
+      return false;
+    }
+    return list.contains(role.value!);
   }
 
   @override

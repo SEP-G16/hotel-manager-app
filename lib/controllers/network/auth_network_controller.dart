@@ -11,7 +11,7 @@ import '../../constants/network_constants.dart';
 class AuthNetworkController extends GetxController{
   static AuthNetworkController instance = Get.find();
 
-  Future<void> validateToken({required String token}) async {
+  Future<Map<String, dynamic>> fetchRole({required String token}) async {
     var response = await http.get(
       Uri.parse('${NetworkConstants.baseUrl}/api/auth/profile'),
       headers: {
@@ -22,6 +22,8 @@ class AuthNetworkController extends GetxController{
     if(response.statusCode == 401){
       throw TokenExpiredException('Token expired');
     }
+
+    return jsonDecode(response.body);
   }
 
   Future<String> login({required String email, required String password}) async {
