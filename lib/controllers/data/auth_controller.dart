@@ -34,7 +34,6 @@ class AuthController extends GetxController {
 
   Future<void> _initController() async {
     try {
-      await Future.delayed(Duration(seconds: 3));
       await _getTokenFromSecureStorage();
       await _fetchRole();
 

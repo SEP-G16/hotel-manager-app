@@ -16,6 +16,7 @@ class Booking {
   final DateTime checkoutDate;
   final List<Room> rooms;
   double totalAmount;
+  DateTime? createdAt;
 
   Booking({
     required this.id,
@@ -30,6 +31,7 @@ class Booking {
     required this.email,
     required this.rooms,
     this.totalAmount = 0,
+    this.createdAt,
   });
 
   // Convert Booking object to Map
@@ -66,6 +68,7 @@ class Booking {
       checkoutDate: DateTime.parse(map['checkoutDate']),
       rooms: List<Room>.from(map['roomList']?.map((x) => Room.fromMap(x))),
       totalAmount: map['roomCount']! * map['roomType']!['price']!,
+      createdAt: DateTime.parse(map['createdAt']),
     );
   }
 

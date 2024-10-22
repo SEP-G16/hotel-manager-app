@@ -103,7 +103,7 @@ class BookingsTabBarView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Looks like no one has been added yet!',
+                            'Accepts some reservations to view bookings here!',
                             textAlign: TextAlign.center,
                             style: TextConstants.mainTextStyle(
                                 color: ColourConstants.richBlack),

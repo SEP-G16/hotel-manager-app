@@ -31,6 +31,7 @@ class LoadingDialog {
     if (callerFunction != null) {
       try {
         await callerFunction!();
+        print('Exited');
         Get.back(); //close loading dialog
         if (onSuccessCallBack != null) {
           onSuccessCallBack!();

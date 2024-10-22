@@ -90,4 +90,8 @@ class TempBookingTabViewScreenStateController extends GetxController {
       _displayedReservationList.assignAll(value);
     });
   }
+
+  Future<void> reInitController() async {
+    await _bdc.reinitController();
+  }
 }

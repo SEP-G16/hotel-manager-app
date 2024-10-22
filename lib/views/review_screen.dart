@@ -19,15 +19,10 @@ class ReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      DrawerStateController.instance.selectedIndex = DrawerStateController.REVIEWS_INDEX;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DrawerStateController.instance.selectedIndex =
+          DrawerStateController.REVIEWS_INDEX;
     });
-
-
-    Size deviceSize = MediaQuery.of(context).size;
-    double deviceHeight = deviceSize.height;
-    double deviceWidth = deviceSize.width;
 
     return GetBuilder<ReviewScreenTabBarController>(
       init: ReviewScreenTabBarController(),
@@ -156,157 +151,183 @@ class ReviewScreen extends StatelessWidget {
                     children: [
                       RefreshIndicator(
                         onRefresh: () async {
-                          await Future.delayed(Duration(seconds: 1));
+                          await ReviewDataController.instance
+                              .reinitController();
                         },
-                        child: RefreshIndicator(
-                          onRefresh: () async {
-                            try {
-                              await ReviewDataController.instance
-                                  .reinitController();
-                            } catch (e) {
-                              MessageDialogBox(
-                                  message: 'An Unexpected Error Occurred');
-                            }
-                          },
-                          child: SingleChildScrollView(
-                            child: Obx(
-                              () => Column(
-                                children: ReviewDataController
-                                    .instance.reviewList
+                        child: Obx(
+                          () => CustomScrollView(
+                            slivers: ReviewDataController.instance.reviewList
                                     .where((review) =>
                                         review.status == ReviewStatus.Pending)
-                                    .toList()
-                                    .map<ReviewTile>(
-                                      (review) => ReviewTile(
-                                        review: review,
-                                        onAcceptTap: () async {
-                                          LoadingDialog(
-                                              callerFunction: () async {
-                                            await ReviewDataController.instance
-                                                .acceptReview(
-                                              tempReviewId: review.id,
-                                            );
-                                          }, onErrorCallBack: (e) {
-                                            print(e.toString());
-                                            Get.dialog(
-                                              Dialog(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                  ),
-                                                  padding: EdgeInsets.all(20.0),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                          'An Unexpected Error Occurred'),
-                                                      SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      ActionButton(
-                                                          btnText: 'OK',
+                                    .isNotEmpty
+                                ? ReviewDataController.instance.reviewList
+                                    .where((review) =>
+                                        review.status == ReviewStatus.Pending)
+                                    .map((review) {
+                                    return SliverList(
+                                      delegate: SliverChildListDelegate(
+                                        [
+                                          ReviewTile(
+                                            review: review,
+                                            onAcceptTap: () async {
+                                              LoadingDialog(
+                                                  callerFunction: () async {
+                                                await ReviewDataController
+                                                    .instance
+                                                    .acceptReview(
+                                                  tempReviewId: review.id,
+                                                );
+                                              }, onSuccessCallBack: () {
+                                                Get.snackbar(
+                                                  'Review accepted successfully',
+                                                  'Review was accepted successfully',
+                                                  backgroundColor:
+                                                      ColourConstants.green1,
+                                                  colorText:
+                                                      ColourConstants.ivory,
+                                                );
+                                              }, onErrorCallBack: (e) {
+                                                print(e.toString());
+                                                MessageDialogBox(message: 'An unexpected error occurred');
+                                              });
+                                            },
+                                            onRejectTap: () {
+                                              Get.dialog(
+                                                Dialog(
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.all(10.0),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Text(
+                                                          'Are you sure you want to reject this review?',
+                                                          style: TextConstants
+                                                              .subTextStyle(),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 20,
+                                                        ),
+                                                        ActionButton(
+                                                          outlineMode: true,
+                                                          borderColour:
+                                                              ColourConstants
+                                                                  .red1,
+                                                          borderWidth: 2.0,
+                                                          btnText: 'Yes',
+                                                          fontSize: 18,
+                                                          onTap: () async {
+                                                            //TODO: review remove functionality
+                                                            await ReviewDataController
+                                                                .instance
+                                                                .rejectReview(
+                                                                    tempReviewId:
+                                                                        review
+                                                                            .id);
+                                                            Get.back();
+                                                          },
+                                                          height: 40,
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        ActionButton(
+                                                          outlineMode: true,
+                                                          borderColour:
+                                                              ColourConstants
+                                                                  .chineseBlack,
+                                                          borderWidth: 2.0,
+                                                          btnText: 'No',
+                                                          fontSize: 18,
+                                                          height: 40,
                                                           onTap: () {
                                                             Get.back();
-                                                          }),
-                                                    ],
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            );
-                                          });
-                                          Get.snackbar(
-                                            'Review accepted successfully',
-                                            'Review was accepted successfully',
-                                            backgroundColor:
-                                            ColourConstants.green1,
-                                            colorText:
-                                            ColourConstants.ivory,
-                                          );
-                                        },
-                                        onRejectTap: () {
-                                          Get.dialog(
-                                            Dialog(
-                                              child: Container(
-                                                padding: EdgeInsets.all(10.0),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      'Are you sure you want to reject this review?',
-                                                      style: TextConstants
-                                                          .subTextStyle(),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    ActionButton(
-                                                      outlineMode: true,
-                                                      borderColour:
-                                                          ColourConstants.red1,
-                                                      borderWidth: 2.0,
-                                                      btnText: 'Yes',
-                                                      fontSize: 18,
-                                                      onTap: () {
-                                                        //TODO: review remove functionality
-                                                      },
-                                                      height: 40,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    ActionButton(
-                                                      outlineMode: true,
-                                                      borderColour:
-                                                          ColourConstants
-                                                              .chineseBlack,
-                                                      borderWidth: 2.0,
-                                                      btnText: 'No',
-                                                      fontSize: 18,
-                                                      height: 40,
-                                                      onTap: () {
-                                                        Get.back();
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        onAcceptErrorCallBack: (e){
-                                          Get.snackbar('Error', e.toString());
-                                        },
+                                              );
+                                            },
+                                            onAcceptErrorCallBack: (e) {
+                                              Get.snackbar(
+                                                  'Error', e.toString());
+                                            },
+                                          )
+                                        ],
                                       ),
-                                    )
-                                    .toList(),
-                              ),
-                            ),
+                                    );
+                                  }).toList()
+                                : <Widget>[
+                                    SliverFillRemaining(
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Looks like there aren\'t any pending reviews!',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  TextConstants.mainTextStyle(
+                                                      color: ColourConstants
+                                                          .richBlack),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                           ),
                         ),
                       ),
                       RefreshIndicator(
                         onRefresh: () async {
-                          await Future.delayed(Duration(seconds: 1));
+                          await ReviewDataController.instance
+                              .reinitController();
                         },
-                        child: SingleChildScrollView(
-                          child: Obx(
-                            () => Column(
-                              children: ReviewDataController.instance.reviewList
-                                  .where((review) =>
-                                      review.status == ReviewStatus.Approved)
-                                  .toList()
-                                  .map<ReviewTile>(
-                                    (review) => ReviewTile(
-                                      review: review,
+                        child: Obx(
+                          () => CustomScrollView(
+                            slivers: ReviewDataController.instance.reviewList
+                                    .where((review) =>
+                                        review.status == ReviewStatus.Approved)
+                                    .isNotEmpty
+                                ? ReviewDataController.instance.reviewList
+                                    .where((review) =>
+                                        review.status == ReviewStatus.Approved)
+                                    .map((review) {
+                                    return SliverList(
+                                      delegate: SliverChildListDelegate(
+                                        [
+                                          ReviewTile(
+                                            review: review,
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }).toList()
+                                : <Widget>[
+                                    SliverFillRemaining(
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Looks like there aren\'t any pending reviews!',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  TextConstants.mainTextStyle(
+                                                      color: ColourConstants
+                                                          .richBlack),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                  .toList(),
-                            ),
+                                  ],
                           ),
                         ),
                       ),

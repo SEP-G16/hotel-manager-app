@@ -19,9 +19,9 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      DrawerStateController.instance.selectedIndex = DrawerStateController.DASHBAORD_INDEX;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DrawerStateController.instance.selectedIndex =
+          DrawerStateController.DASHBAORD_INDEX;
     });
 
     return Scaffold(
@@ -39,19 +39,17 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Builder(
-                      builder: (context) {
-                        return GestureDetector(
-                          onTap: () {
-                            Scaffold.of(context).openDrawer();
-                          },
-                          child: Icon(
-                            Icons.menu_rounded,
-                            size: 30,
-                          ),
-                        );
-                      }
-                    ),
+                    child: Builder(builder: (context) {
+                      return GestureDetector(
+                        onTap: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                        child: Icon(
+                          Icons.menu_rounded,
+                          size: 30,
+                        ),
+                      );
+                    }),
                   ),
                   Align(
                     alignment: Alignment.center,
@@ -84,12 +82,16 @@ class DashboardScreen extends StatelessWidget {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
-                                      DrawerStateController.instance.selectedIndex = 1;
+                                      DrawerStateController
+                                              .instance.selectedIndex =
+                                          DrawerStateController.BOOKINGS_INDEX;
                                       Get.to(() => ManageReservationsScreen());
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                                      margin: EdgeInsets.symmetric(horizontal: 5),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 10),
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5),
                                       decoration: BoxDecoration(
                                         color: ColourConstants.mainBlue,
                                         borderRadius: BorderRadius.circular(5),
@@ -103,9 +105,13 @@ class DashboardScreen extends StatelessWidget {
                                           ),
                                           Obx(
                                             () => Text(
-                                              DashboardStateController.instance.reservationCount.toString(),
-                                              style: TextConstants.mainTextStyle(
-                                                  color: ColourConstants.white),
+                                              DashboardStateController
+                                                  .instance.reservationCount
+                                                  .toString(),
+                                              style:
+                                                  TextConstants.mainTextStyle(
+                                                      color: ColourConstants
+                                                          .white),
                                             ),
                                           )
                                         ],
@@ -116,12 +122,16 @@ class DashboardScreen extends StatelessWidget {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
-                                      DrawerStateController.instance.selectedIndex = 1;
+                                      DrawerStateController
+                                              .instance.selectedIndex =
+                                          DrawerStateController.BOOKINGS_INDEX;
                                       Get.to(() => ManageReservationsScreen());
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                                      margin: EdgeInsets.symmetric(horizontal: 5),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 10),
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5),
                                       decoration: BoxDecoration(
                                         color: ColourConstants.mainBlue,
                                         borderRadius: BorderRadius.circular(5),
@@ -135,9 +145,13 @@ class DashboardScreen extends StatelessWidget {
                                           ),
                                           Obx(
                                             () => Text(
-                                              DashboardStateController.instance.bookingCount.toString(),
-                                              style: TextConstants.mainTextStyle(
-                                                  color: ColourConstants.white),
+                                              DashboardStateController
+                                                  .instance.bookingCount
+                                                  .toString(),
+                                              style:
+                                                  TextConstants.mainTextStyle(
+                                                      color: ColourConstants
+                                                          .white),
                                             ),
                                           )
                                         ],
@@ -155,12 +169,16 @@ class DashboardScreen extends StatelessWidget {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
-                                      DrawerStateController.instance.selectedIndex = 2;
+                                      DrawerStateController
+                                              .instance.selectedIndex =
+                                          DrawerStateController.REVIEWS_INDEX;
                                       Get.to(() => ReviewScreen());
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                                      margin: EdgeInsets.symmetric(horizontal: 5),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 10),
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5),
                                       decoration: BoxDecoration(
                                         color: ColourConstants.mainBlue,
                                         borderRadius: BorderRadius.circular(5),
@@ -174,24 +192,33 @@ class DashboardScreen extends StatelessWidget {
                                           ),
                                           Obx(
                                             () => Text(
-                                              DashboardStateController.instance.reviewCount.toString(),
-                                              style: TextConstants.mainTextStyle(
-                                                  color: ColourConstants.white),
+                                              DashboardStateController
+                                                  .instance.reviewCount
+                                                  .toString(),
+                                              style:
+                                                  TextConstants.mainTextStyle(
+                                                      color: ColourConstants
+                                                          .white),
                                             ),
                                           )
                                         ],
                                       ),
                                     ),
                                   ),
-                                ),Expanded(
+                                ),
+                                Expanded(
                                   child: GestureDetector(
-                                    onTap: (){
-                                      DrawerStateController.instance.selectedIndex = 3;
+                                    onTap: () {
+                                      DrawerStateController
+                                              .instance.selectedIndex =
+                                          DrawerStateController.MESSAGES_INDEX;
                                       Get.to(() => MessageScreen());
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                                      margin: EdgeInsets.symmetric(horizontal: 5),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 10),
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5),
                                       decoration: BoxDecoration(
                                         color: ColourConstants.mainBlue,
                                         borderRadius: BorderRadius.circular(5),
@@ -205,9 +232,13 @@ class DashboardScreen extends StatelessWidget {
                                           ),
                                           Obx(
                                             () => Text(
-                                              DashboardStateController.instance.messageCount.toString(),
-                                              style: TextConstants.mainTextStyle(
-                                                  color: ColourConstants.white),
+                                              DashboardStateController
+                                                  .instance.messageCount
+                                                  .toString(),
+                                              style:
+                                                  TextConstants.mainTextStyle(
+                                                      color: ColourConstants
+                                                          .white),
                                             ),
                                           )
                                         ],
@@ -219,7 +250,9 @@ class DashboardScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: [
                             Text(
@@ -231,28 +264,52 @@ class DashboardScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            DrawerStateController.instance.selectedIndex = 5;
-                          Get.to(() => ManageStaffScreen());},
+                            DrawerStateController.instance.selectedIndex =
+                                DrawerStateController.STAFF_INDEX;
+                            Get.to(() => ManageStaffScreen());
+                          },
                           child: Container(
                             padding: EdgeInsets.all(10),
                             margin: EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
                               color: ColourConstants.white,
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: ColourConstants.mainBlue, width: 2),
+                              border: Border.all(
+                                  color: ColourConstants.mainBlue, width: 2),
                             ),
                             child: Row(
                               children: [
-                                SvgPicture.string(SvgConstants.employeeGroupImage, height: 100,),
-                                SizedBox(width: 10,),
-                                Expanded(child: Text('Manage your Employees', style: TextConstants.subTextStyle(fontSize: 22), overflow: TextOverflow.visible,)),
+                                SvgPicture.string(
+                                  SvgConstants.employeeGroupImage,
+                                  height: 100,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Manage your Employees',
+                                    style: TextConstants.subTextStyle(
+                                        fontSize: 22),
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                         ),
-                        SizedBox(height: 10,),
-                        SvgPicture.string(SvgConstants.dashboardScreenImage, width: MediaQuery.of(context).size.width * 0.7,),
-                        Text('Time to Start Managing your Hotel!', style: TextConstants.subTextStyle(), textAlign: TextAlign.center,),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        SvgPicture.string(
+                          SvgConstants.dashboardScreenImage,
+                          width: MediaQuery.of(context).size.width * 0.7,
+                        ),
+                        Text(
+                          'Time to Start Managing your Hotel!',
+                          style: TextConstants.subTextStyle(),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ),
                   ),

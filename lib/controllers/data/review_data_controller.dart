@@ -12,6 +12,7 @@ class ReviewDataController extends GetxController {
 
   RxList<Review> _reviewList = <Review>[].obs;
   List<Review> get reviewList => _reviewList;
+  RxList<Review> listenableReviewList = <Review>[].obs;
 
   ReviewDataController._();
 
@@ -28,13 +29,17 @@ class ReviewDataController extends GetxController {
 
   Future<void> _initController() async {
     _reviewList.assignAll(await _getReviews());
+    listenableReviewList.assignAll(_reviewList);
   }
 
   Future<List<Review>> _getReviews() async {
     try {
       List<Map<String, dynamic>> reviewsMapList =
           await _rnc.getReviews();
-      return reviewsMapList.map((map) => Review.fromMap(map)).toList();
+      List<Review> reviews = reviewsMapList.map((map) => Review.fromMap(map)).toList();
+      reviews.sort(
+              (a, b) => b.createdAt.compareTo(a.createdAt));
+      return reviews;
     } on NetworkException catch (e) {
       rethrow;
     } catch (e) {
@@ -54,6 +59,7 @@ class ReviewDataController extends GetxController {
       _reviewList.add(review.copyWith(status: ReviewStatus.Approved));
       _reviewList.sort(
           (a, b) => a.createdAt.isBefore(b.createdAt) ? 1 : 0); //check sort
+      listenableReviewList.assignAll(_reviewList);
     } on NetworkException catch (e) {
       rethrow;
     } catch (e) {
@@ -66,6 +72,7 @@ class ReviewDataController extends GetxController {
       await _rnc.rejectReview(tempReviewId: tempReviewId);
       _reviewList
           .removeWhere((tempReview) => tempReview.id == tempReviewId);
+      listenableReviewList.assignAll(_reviewList);
     } on NetworkException catch (e) {
       rethrow;
     } catch (e) {

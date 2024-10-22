@@ -14,10 +14,12 @@ class BookingDataController extends GetxController {
   final BookingNetworkController _bnc = BookingNetworkController.instance;
 
   RxList<Reservation> _tempBookingList = <Reservation>[].obs;
+
   List<Reservation> get tempBookingList => _tempBookingList;
   RxList<Reservation> listenableReservationList = <Reservation>[].obs;
 
   RxList<Booking> _bookingList = <Booking>[].obs;
+
   List<Booking> get bookingList => _bookingList;
   RxList<Booking> listenableBookingList = <Booking>[].obs;
 
@@ -35,10 +37,19 @@ class BookingDataController extends GetxController {
 
   Future<void> _initController() async {
     List<Reservation> tempBookingList = await _getTempBookings();
+    tempBookingList.sort((a, b) => a.createdAt.isBefore(b.createdAt) ? 1 : 0);
     _tempBookingList.assignAll(tempBookingList);
     listenableReservationList.assignAll(tempBookingList);
 
     List<Booking> acceptedBookingList = await _getAcceptedBookings();
+    acceptedBookingList.sort(
+      (a, b) {
+        if (a.createdAt != null && b.createdAt != null) {
+          return a.createdAt!.isBefore(b.createdAt!) ? 1 : 0;
+        }
+        return 0;
+      },
+    );
     _bookingList.assignAll(acceptedBookingList);
     listenableBookingList.assignAll(acceptedBookingList);
   }
@@ -84,7 +95,8 @@ class BookingDataController extends GetxController {
   Future<void> rejectBooking({required int tempBookingId}) async {
     try {
       await _bnc.rejectBooking(tempBookingId: tempBookingId);
-      tempBookingList.removeWhere((tempBooking) => tempBooking.id == tempBookingId);
+      tempBookingList
+          .removeWhere((tempBooking) => tempBooking.id == tempBookingId);
       listenableReservationList.assignAll(tempBookingList);
     } on NetworkException catch (e) {
       rethrow;
@@ -94,7 +106,8 @@ class BookingDataController extends GetxController {
   }
 
   Future<String> getAvailabilityStatus(
-      DateTime from, DateTime to, RoomType roomType, {int? expectedCount}) async {
+      DateTime from, DateTime to, RoomType roomType,
+      {int? expectedCount}) async {
     try {
       List<Map<String, dynamic>> availabilityMapList =
           await _bnc.getAvailableRoomCount(from: from, to: to);
@@ -103,7 +116,9 @@ class BookingDataController extends GetxController {
 
       int availableCount = (availabilityMap['roomCount']! as int);
 
-      return availableCount != 0 &&  availableCount >= (expectedCount ?? 0)? 'Available' : 'Unavailable';
+      return availableCount != 0 && availableCount >= (expectedCount ?? 0)
+          ? 'Available'
+          : 'Unavailable';
     } on NetworkException catch (e) {
       rethrow;
     } catch (e) {
@@ -133,20 +148,24 @@ class BookingDataController extends GetxController {
     }
   }
 
-  Future<void> addBookingByReservation({required Reservation reservation, required List<Room> roomList}) async {
+  Future<void> addBookingByReservation(
+      {required Reservation reservation, required List<Room> roomList}) async {
     try {
       Booking booking = Booking.fromReservation(reservation, roomList);
       Map<String, dynamic> bookingMap = booking.toMap();
       bookingMap['id'] = null;
-      Map<String, dynamic> newBookingMap = await _bnc.addBooking(map : bookingMap);
+      Map<String, dynamic> newBookingMap =
+          await _bnc.addBooking(map: bookingMap);
 
-      await _bnc.removeReservation(reservationId : reservation.id);
+      await _bnc.removeReservation(reservationId: reservation.id);
 
       _bookingList.add(Booking.fromMap(newBookingMap));
       listenableBookingList.add(Booking.fromMap(newBookingMap));
 
-      _tempBookingList.removeWhere((existingReservation) => existingReservation.id == reservation.id);
-      listenableReservationList.removeWhere((existingReservation) => existingReservation.id == reservation.id);
+      _tempBookingList.removeWhere(
+          (existingReservation) => existingReservation.id == reservation.id);
+      listenableReservationList.removeWhere(
+          (existingReservation) => existingReservation.id == reservation.id);
     } on NetworkException catch (e) {
       rethrow;
     } catch (e) {

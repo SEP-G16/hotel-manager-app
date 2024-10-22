@@ -66,41 +66,44 @@ class ManageStaffScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: SearchAnchor(builder: (context, controller) {
-                    return SearchBar(
-                      onChanged: (value) {
-                        ManageStaffScreenStateController.instance
-                            .handleSearchTextChange(value);
-                      },
-                      leading: IconButton(
-                        icon: Icon(
-                          Icons.search_rounded,
-                          color: ColourConstants.mainBlue,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SearchAnchor(builder: (context, controller) {
+                      return SearchBar(
+                        onChanged: (value) {
+                          ManageStaffScreenStateController.instance
+                              .handleSearchTextChange(value);
+                        },
+                        leading: IconButton(
+                          icon: Icon(
+                            Icons.search_rounded,
+                            color: ColourConstants.mainBlue,
+                          ),
+                          onPressed: () {},
                         ),
-                        onPressed: () {},
-                      ),
-                      hintText: 'Enter Name or Phone No.',
-                      hintStyle: WidgetStateTextStyle.resolveWith(
-                        (_) => TextConstants.subTextStyle(
-                          fontSize: 16,
-                          color: ColourConstants.chineseBlack.withOpacity(0.4),
+                        hintText: 'Enter Name or Phone No.',
+                        hintStyle: WidgetStateTextStyle.resolveWith(
+                          (_) => TextConstants.subTextStyle(
+                            fontSize: 16,
+                            color: ColourConstants.chineseBlack.withOpacity(0.4),
+                          ),
                         ),
-                      ),
-                      textStyle: WidgetStateTextStyle.resolveWith(
-                        (_) => TextConstants.subTextStyle(
-                          fontSize: 16,
-                          color: ColourConstants.chineseBlack,
+                        textStyle: WidgetStateTextStyle.resolveWith(
+                          (_) => TextConstants.subTextStyle(
+                            fontSize: 16,
+                            color: ColourConstants.chineseBlack,
+                          ),
                         ),
-                      ),
-                    );
-                  }, suggestionsBuilder: (context, controller) {
-                    return [];
-                  }),
-                ),
-              ],
+                      );
+                    }, suggestionsBuilder: (context, controller) {
+                      return [];
+                    }),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: RefreshIndicator(

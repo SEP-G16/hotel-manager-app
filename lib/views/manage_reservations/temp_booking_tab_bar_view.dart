@@ -71,18 +71,47 @@ class TempBookingTabBarView extends StatelessWidget {
           height: 10,
         ),
         Expanded(
-          child: SingleChildScrollView(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await TempBookingTabViewScreenStateController.instance.reInitController();
+            },
             child: Obx(
-              () => Column(
-                children: TempBookingTabViewScreenStateController
+                  () => CustomScrollView(
+                slivers: TempBookingTabViewScreenStateController
+                    .instance.displayedReservationList.isNotEmpty
+                    ? TempBookingTabViewScreenStateController
                     .instance.displayedReservationList
-                    .map<ReservationTile>((reservation) => ReservationTile(
-                        reservation: reservation,
-                        onTap: () {
-                          Get.to(() =>
-                              ViewReservationScreen(reservation: reservation));
-                        }))
-                    .toList(),
+                    .map((reservation) {
+                  return SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        ReservationTile(
+                          reservation: reservation,
+                          onTap: () {
+                            Get.to(() => ViewReservationScreen(reservation: reservation));
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList()
+                    : <Widget>[
+                  SliverFillRemaining(
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Looks like no have reserved any rooms recently!',
+                            textAlign: TextAlign.center,
+                            style: TextConstants.mainTextStyle(
+                                color: ColourConstants.richBlack),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

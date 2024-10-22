@@ -67,6 +67,15 @@ class LoginScreen extends StatelessWidget {
                             snackPosition: SnackPosition.BOTTOM);
                         return;
                       }
+
+                      RegExp emailRegExp = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+                      if(!emailRegExp.hasMatch(email!))
+                      {
+                        Get.snackbar('Error', 'Please enter a valid email',
+                            snackPosition: SnackPosition.BOTTOM);
+                        return;
+                      }
+
                       if (password == null) {
                         Get.snackbar('Error', 'Please enter your password',
                             snackPosition: SnackPosition.BOTTOM);

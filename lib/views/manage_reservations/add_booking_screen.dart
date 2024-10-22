@@ -15,6 +15,7 @@ import 'package:hotel_manager/models/form_valid_response.dart';
 import '../../components/loading_dialog.dart';
 import '../../components/room_tile.dart';
 import '../../models/room.dart';
+import 'manage_reservations_screen.dart';
 
 class AddBookingScreen extends StatelessWidget {
   AddBookingScreen({super.key});
@@ -528,6 +529,8 @@ class AddBookingScreen extends StatelessWidget {
                                 borderWidth: 2.0,
                                 width: 250,
                                 onTap: () {
+                                  AddBookingViewStateController.instance.reInitController();
+                                  Get.to(() => ManageReservationsScreen());
                                   //Navigate back to view all bookings <- show in sorted order by date
                                 },
                               ),
